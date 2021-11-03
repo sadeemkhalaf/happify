@@ -6,10 +6,18 @@
  */
 import React from "react"
 import { useColorScheme } from "react-native"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
-import { navigationRef } from "./navigation-utilities"
+import {
+  AlbumScreen,
+  ArtistScreen,
+  ExpoloreScreen,
+  PlayerScreen,
+  SearchScreen,
+  ProfileScreen,
+} from "../screens"
+import { getTabBarIcon, navigationRef } from "./navigation-utilities"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -23,11 +31,39 @@ import { navigationRef } from "./navigation-utilities"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type NavigatorParamList = {
-  welcome: undefined
-  demo: undefined
-  demoList: undefined
+export type TabsNavigatorParamList = {
+  explore: undefined
+  search: undefined
+  profile: undefined
 }
+
+export type NavigatorParamList = {
+  primaryStack: undefined
+  player: { trackId?: any }
+  artist: { artistId?: any }
+  album: { artistId?: any; albumId?: any }
+}
+// tabs navigation
+const Tabs = createBottomTabNavigator<TabsNavigatorParamList>()
+
+const TabsNav = () => (
+  <Tabs.Navigator
+    screenOptions={({ route }) => ({
+      tabBarStyle: { position: 'absolute', paddingTop: 24, backgroundColor: '#46454B' },
+      tabBarLabelStyle: {fontSize: 15, marginTop: 8, bottom: -8},
+      tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name),
+      headerShown: false,
+      headerShadowVisible: false,
+      tabBarInactiveTintColor: '#A3A2A5',
+      tabBarActiveTintColor: "#BE8EEB",
+    })}
+    initialRouteName={'explore'}
+  >
+    <Tabs.Screen name="explore" component={ExpoloreScreen} />
+    <Tabs.Screen name="search" component={SearchScreen} />
+    <Tabs.Screen name="profile" component={ProfileScreen} />
+  </Tabs.Navigator>
+)
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<NavigatorParamList>()
@@ -36,13 +72,22 @@ const AppStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        gestureEnabled: false,
+        presentation: 'modal',
       }}
-      initialRouteName="welcome"
+      defaultScreenOptions={{orientation: 'portrait', headerShown: false, presentation: 'fullScreenModal'}}
+      initialRouteName={"primaryStack"}
     >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
+      <Stack.Screen
+        name="primaryStack"
+        component={TabsNav}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen name="player" component={PlayerScreen} />
+      <Stack.Screen name="artist" component={ArtistScreen} />
+      <Stack.Screen name="album" component={AlbumScreen} />
     </Stack.Navigator>
   )
 }

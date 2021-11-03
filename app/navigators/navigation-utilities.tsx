@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react"
+
+import React, { useState, useEffect, useRef } from "react"
 import { BackHandler } from "react-native"
 import {
   PartialState,
@@ -6,6 +7,7 @@ import {
   NavigationAction,
   createNavigationContainerRef,
 } from "@react-navigation/native"
+import { Explore, Profile, Search } from "../../assets/images/svgs"
 
 /* eslint-disable */
 export const RootNavigation = {
@@ -70,6 +72,8 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
       return false
     }
 
+    
+
     // Subscribe when we come to life
     BackHandler.addEventListener("hardwareBackPress", onBackPress)
 
@@ -78,6 +82,24 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
   }, [])
 }
 
+
+
+export const getTabBarIcon = (routeName: string): JSX.Element => {
+  let Icon = Explore
+
+  switch (routeName) {
+    case "explore":
+      Icon = Explore
+      break
+    case "profile":
+      Icon = Profile
+      break
+    case "search":
+      Icon = Search
+      break
+  }
+  return <Icon height={24} width={24}/>
+}
 /**
  * Custom hook for persisting navigation state.
  */
