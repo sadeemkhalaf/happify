@@ -1,11 +1,14 @@
+import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
 import React from "react"
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
 
 const ExpoloreScreen = () => {
+  const { navigate } = useNavigation()
+
   const renderAlbumSquare = (isFirst?: boolean) => (
     <View
       style={[
@@ -21,7 +24,8 @@ const ExpoloreScreen = () => {
   )
   const renderTrackSquare = (isFirst?: boolean) => (
     <View style={{ justifyContent: "center", alignItems: "flex-start" }}>
-      <View
+      <TouchableOpacity
+        onPress={() => navigate('player')}
         style={[
           {
             height: 110,

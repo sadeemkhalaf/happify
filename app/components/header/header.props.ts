@@ -42,4 +42,9 @@ export interface HeaderProps {
    * Title style overrides.
    */
   titleStyle?: StyleProp<TextStyle>
+
+  /*  If is in player screen **/
+  isPlayer?: boolean;
+
+  subheader?: string;
 }

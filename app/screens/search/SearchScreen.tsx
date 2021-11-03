@@ -1,7 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient"
 import React, { useState } from "react"
 import { TextInput, View, ViewStyle } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
 
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
@@ -40,7 +39,7 @@ const SearchScreen = () => {
 
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
-      <Screen preset={"fixed"} backgroundColor={"#ffffff00"} style={{ paddingHorizontal: 24 }}>
+      <Screen preset={"fixed"} backgroundColor={"#ffffff00"} style={{ paddingHorizontal: 24, alignItems: "center" }}>
         <Header headerText={"Search"} titleStyle={{ left: -24 }} />
         <View
           style={{
@@ -72,7 +71,7 @@ const SearchScreen = () => {
             {"Go!"}
           </Text>
         </View>
-        <View style={{ display: "flex", flexDirection: "row" }}>
+        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: 'flex-start' }}>
           {renderFilterChip("Artist")}
           {renderFilterChip("Track")}
         </View>

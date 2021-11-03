@@ -18,6 +18,7 @@ import {
   ProfileScreen,
 } from "../screens"
 import { getTabBarIcon, navigationRef } from "./navigation-utilities"
+import { moderateScale, scaleByDeviceWidth } from "../theme/dimensionUtils"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -43,21 +44,27 @@ export type NavigatorParamList = {
   artist: { artistId?: any }
   album: { artistId?: any; albumId?: any }
 }
+
 // tabs navigation
 const Tabs = createBottomTabNavigator<TabsNavigatorParamList>()
 
 const TabsNav = () => (
   <Tabs.Navigator
     screenOptions={({ route }) => ({
-      tabBarStyle: { position: 'absolute', paddingTop: 24, backgroundColor: '#46454B' },
-      tabBarLabelStyle: {fontSize: 15, marginTop: 8, bottom: -8},
+      tabBarStyle: {
+        height: scaleByDeviceWidth(75),
+        paddingBottom: scaleByDeviceWidth(8),
+        backgroundColor: "#46454B",
+      },
+      tabBarLabelStyle: { fontSize: moderateScale(15) },
       tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name),
       headerShown: false,
       headerShadowVisible: false,
-      tabBarInactiveTintColor: '#A3A2A5',
-      tabBarActiveTintColor: "#BE8EEB",
+      tabBarInactiveTintColor: "#A3A2A5",
+      tabBarActiveTintColor: "#dc8eeb",
+      tabBarHideOnKeyboard: true,
     })}
-    initialRouteName={'explore'}
+    initialRouteName={"explore"}
   >
     <Tabs.Screen name="explore" component={ExpoloreScreen} />
     <Tabs.Screen name="search" component={SearchScreen} />
@@ -72,10 +79,15 @@ const AppStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        gestureEnabled: false,
-        presentation: 'modal',
+        gestureEnabled: true,
+        orientation: "portrait",
+        headerShown: false,
       }}
-      defaultScreenOptions={{orientation: 'portrait', headerShown: false, presentation: 'fullScreenModal'}}
+      defaultScreenOptions={{
+        orientation: "portrait",
+        headerShown: false,
+        gestureEnabled: true,
+      }}
       initialRouteName={"primaryStack"}
     >
       <Stack.Screen
@@ -85,7 +97,16 @@ const AppStack = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="player" component={PlayerScreen} />
+      <Stack.Screen
+        options={{
+          presentation: "modal",
+          animation: "slide_from_left",
+          gestureEnabled: true,
+          statusBarAnimation: "slide",
+        }}
+        name="player"
+        component={PlayerScreen}
+      />
       <Stack.Screen name="artist" component={ArtistScreen} />
       <Stack.Screen name="album" component={AlbumScreen} />
     </Stack.Navigator>

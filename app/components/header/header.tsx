@@ -6,6 +6,7 @@ import { Text } from "../text/text"
 import { Icon } from "../icon/icon"
 import { spacing } from "../../theme"
 import { translate } from "../../i18n/"
+import { moderateScale } from "../../theme/dimensionUtils"
 
 // static styles
 const ROOT: ViewStyle = {
@@ -18,6 +19,12 @@ const ROOT: ViewStyle = {
 }
 
 const TITLE: TextStyle = { textAlign: "left", fontWeight: "900", fontSize: 30 }
+const PLAYERTITLE: TextStyle = { textAlign: "center", fontSize: moderateScale(13) }
+const PLAYERSUBHEADER: TextStyle = {
+  textAlign: "center",
+  fontWeight: "bold",
+  fontSize: moderateScale(14),
+}
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
 const LEFT: ViewStyle = { width: 32 }
 const RIGHT: ViewStyle = { width: 32 }
@@ -35,6 +42,8 @@ export function Header(props: HeaderProps) {
     headerTx,
     style,
     titleStyle,
+    isPlayer = false,
+    subheader = "",
   } = props
   const header = headerText || (headerTx && translate(headerTx)) || ""
 
@@ -48,7 +57,8 @@ export function Header(props: HeaderProps) {
         <View style={LEFT} />
       )}
       <View style={TITLE_MIDDLE}>
-        <Text style={[TITLE, titleStyle]} text={header} />
+        <Text style={[isPlayer ? PLAYERTITLE : TITLE, titleStyle]} text={header} />
+        {isPlayer && <Text style={[PLAYERSUBHEADER, titleStyle]} text={subheader} />}
       </View>
       {rightIcon ? (
         <Button preset="link" onPress={onRightPress}>
