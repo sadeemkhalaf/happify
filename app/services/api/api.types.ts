@@ -54,32 +54,51 @@ export interface Album {
   realease: string
   label: string
   explicit: boolean
-  api_artist: string
-  api_albums: string
-  api_album: string
-  api_tracks: string
+  api_artist: string //“https://api.happi.dev/v1/music/artists/173585”
+  api_albums: string //“https://api.happi.dev/v1/music/artists/173585”
+  api_album: string //“https://api.happi.dev/v1/music/artists/173585”
+  api_tracks: string //“https://api.happi.dev/v1/music/artists/173585”
 }
 
+export interface ArtistSearchResult {
+  artist: string //“Happy”,
+  id_artist: number //173585,
+  cover: string //“https://api.happi.dev/v1/music/cover/173585/artist”,
+  api_artist: string //“https://api.happi.dev/v1/music/artists/173585”
+}
 
 // get each type
-export type GetArtistResult = { kind: "ok"; result: Artist } | GeneralApiProblem
-export type GetAlbumResult = { kind: "ok"; result: Album } | GeneralApiProblem
-export type GetTrackResult = { kind: "ok"; result: Track } | GeneralApiProblem
+export type GetArtistResult = { success: boolean; result: Artist } | GeneralApiProblem
+export type GetArtistsResult = { success: boolean; result: Artist[] } | GeneralApiProblem
+export type GetAlbumResult = { success: boolean; result: Album } | GeneralApiProblem
+export type GetTrackResult = { success: boolean; result: Track } | GeneralApiProblem
 
 // artist albums and tracks
-export type GetArtistAlbumsResult = { kind: "ok"; result: Album[], length?: number } | GeneralApiProblem
-export type GetArtistAlbumTracksResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
+export type GetArtistAlbumsResult =
+  | { success: boolean; result: Album[]; length?: number }
+  | GeneralApiProblem
+export type GetArtistAlbumTracksResult =
+  | { success: boolean; result: Track[]; length?: number }
+  | GeneralApiProblem
 
 //search results
-export type GetTracksSearchResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
-export type GetArtistsSearchResult = { kind: "ok"; result: Artist[], length?: number } | GeneralApiProblem
+export type GetTracksSearchResult =
+  | { success: boolean; result: Track[]; length?: number }
+  | GeneralApiProblem
+export type GetArtistsSearchResult =
+  | { success: boolean; result: ArtistSearchResult[]; length?: number }
+  | GeneralApiProblem
 
 //Album tracks
-export type GetAlbumsResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
+export type GetAlbumsResult =
+  | { success: boolean; result: Track[]; length?: number }
+  | GeneralApiProblem
 
-export type GetSmartPlaylistResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
+export type GetSmartPlaylistResult =
+  | { success: boolean; result: Track[]; length?: number }
+  | GeneralApiProblem
 
-
+// dummy
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
 

@@ -1,6 +1,6 @@
 import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
-import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
+import { ApiConfig, artist_url, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 
 /**
@@ -45,37 +45,6 @@ export class Api {
       },
     })
   }
-
-
-    /**
-   * Gets a list of Albums by artist id.
-   */
-     async getAlbums(): Promise<Types.GetUsersResult> {
-      // make the api call
-      const response: ApiResponse<any> = await this.apisauce.get(`/users`)
-  
-      // the typical ways to die when calling an api
-      if (!response.ok) {
-        const problem = getGeneralApiProblem(response)
-        if (problem) return problem
-      }
-  
-      const convertUser = (raw) => {
-        return {
-          id: raw.id,
-          name: raw.name,
-        }
-      }
-  
-      // transform the data into the format we are expecting
-      try {
-        const rawUsers = response.data
-        const resultUsers: Types.User[] = rawUsers.map(convertUser)
-        return { kind: "ok", users: resultUsers }
-      } catch {
-        return { kind: "bad-data" }
-      }
-    }
 
   /**
    * Gets a list of users.

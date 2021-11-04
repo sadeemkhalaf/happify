@@ -16,9 +16,14 @@ export const album_url = `/${searchKey.ALBUM}/`
 export const generateTrackUrl = (artistId: number, albumId: number) => {
   // result:
   //  /artists/:id_artist/albums/:id_album/tracks/:id_track
-  return `${artist_url}${artistId}${album_url}${albumId}`
+  return `${artist_url}${artistId}${album_url}${albumId}${searchKey.TRACK}`
 }
 
+
+/*
+https://api.happi.dev/v1/music?q=happy&limit=15&
+apikey=8742c6U7Yzl8udLqg17aGJUwmAZos5Bj9SY9pPMd25jGsMnaWKQkA1IY&type=artist&lyrics=0
+*/
 
 /**
  * The options used to configure the API.

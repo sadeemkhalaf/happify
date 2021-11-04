@@ -1,9 +1,10 @@
+import React, { useEffect } from "react"
 import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
-import React from "react"
 import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
+import { Api } from "../../services/api/api"
 import { color } from "../../theme"
 import { moderateScale } from "../../theme/dimensionUtils"
 
@@ -21,6 +22,11 @@ const ShadowEffect: ViewStyle = {
 
 const ExpoloreScreen = () => {
   const { navigate } = useNavigation()
+  const apiService = new Api()
+
+  useEffect(() => {
+    apiService.getArtists().then((res) => console.log(res))
+  }, [])
 
   const renderAlbumSquare = (isFirst?: boolean) => (
     <TouchableOpacity
