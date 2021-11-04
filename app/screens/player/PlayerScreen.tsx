@@ -23,12 +23,13 @@ const PlayerScreen = () => {
 
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
+      <Header isPlayer headerText={"Playing from Artist"} subheader={"THE-Album"} />
       <Screen
+        unsafe
         preset={"scroll"}
-        backgroundColor={"#ffffff00"}
+        backgroundColor={"transparent"}
         style={{ paddingHorizontal: 24, alignItems: "center" }}
       >
-        <Header isPlayer headerText={"Playing from Artist"} subheader={"THE-Album"} />
         <View
           style={{
             width: scaleByDeviceWidth(342),
@@ -81,7 +82,6 @@ const PlayerScreen = () => {
             <Text text={millisToMin(MAX)} />
           </View>
         </View>
-        
       </Screen>
     </LinearGradient>
   )

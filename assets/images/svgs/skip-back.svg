@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22.388" height="16.887" viewBox="0 0 22.388 16.887">
+  <g id="Group_25" data-name="Group 25" transform="translate(0)">
+    <path id="Icon_awesome-play" data-name="Icon awesome-play" d="M.778,7.082,12.387.219a1.574,1.574,0,0,1,2.388,1.362V15.3a1.582,1.582,0,0,1-2.388,1.362L.778,9.806a1.581,1.581,0,0,1,0-2.724Z" transform="translate(7.613 -0.002)" fill="#fff"/>
+    <path id="Icon_awesome-pause" data-name="Icon awesome-pause" d="M8.443,15.372V3.763A1.583,1.583,0,0,1,10.026,2.18h3.166a1.583,1.583,0,0,1,1.583,1.583V15.372a1.583,1.583,0,0,1-1.583,1.583H10.026A1.583,1.583,0,0,1,8.443,15.372Z" transform="translate(-8.443 -1.18)" fill="#fff"/>
+  </g>
+</svg>

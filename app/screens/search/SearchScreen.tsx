@@ -4,6 +4,7 @@ import { TextInput, View, ViewStyle } from "react-native"
 
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
+import { scaleByDeviceWidth } from "../../theme/dimensionUtils"
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("")
@@ -39,7 +40,7 @@ const SearchScreen = () => {
 
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
-      <Screen preset={"fixed"} backgroundColor={"#ffffff00"} style={{ paddingHorizontal: 24, alignItems: "center" }}>
+      <Screen preset={"fixed"} backgroundColor={"transparent"} style={{ paddingHorizontal: 24, alignItems: "center" }}>
         <Header headerText={"Search"} titleStyle={{ left: -24 }} />
         <View
           style={{
@@ -64,10 +65,10 @@ const SearchScreen = () => {
             clearButtonMode={"while-editing"}
             autoFocus
             placeholderTextColor={"#938BAC"}
-            multiline={false}
+            multiline={false} 
             maxLength={50}
           />
-          <Text style={{ fontWeight: "600", marginLeft: 16, color: "#B87BF2" }} onPress={() => {}}>
+          <Text style={{ fontWeight: "600", marginLeft: scaleByDeviceWidth(16), color: "#B87BF2" }} onPress={() => {}}>
             {"Go!"}
           </Text>
         </View>

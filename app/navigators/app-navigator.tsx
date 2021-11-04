@@ -103,12 +103,33 @@ const AppStack = () => {
           animation: "slide_from_left",
           gestureEnabled: true,
           statusBarAnimation: "slide",
+          animationTypeForReplace: "push",
         }}
         name="player"
         component={PlayerScreen}
       />
-      <Stack.Screen name="artist" component={ArtistScreen} />
-      <Stack.Screen name="album" component={AlbumScreen} />
+      <Stack.Screen
+        options={{
+          presentation: "modal",
+          animation: "slide_from_left",
+          gestureEnabled: true,
+          statusBarAnimation: "slide",
+          animationTypeForReplace: "push",
+        }}
+        name="artist"
+        component={ArtistScreen}
+      />
+      <Stack.Screen
+        options={{
+          presentation: "modal",
+          animation: "slide_from_left",
+          gestureEnabled: true,
+          statusBarAnimation: "slide",
+          animationTypeForReplace: "push",
+        }}
+        name="album"
+        component={AlbumScreen}
+      />
     </Stack.Navigator>
   )
 }
