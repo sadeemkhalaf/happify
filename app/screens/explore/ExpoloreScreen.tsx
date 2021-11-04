@@ -5,6 +5,7 @@ import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
+import { moderateScale } from "../../theme/dimensionUtils"
 
 const ShadowEffect: ViewStyle = {
   shadowColor: "#2f2730",
@@ -67,7 +68,7 @@ const ExpoloreScreen = () => {
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
       <Screen preset={"scroll"} backgroundColor={"transparent"} style={{ paddingHorizontal: 24 }}>
-        <Header headerText={"Explore"} titleStyle={{ left: -24 }} />
+        <Header headerText={"Explore"} titleStyle={{ left: moderateScale(-32) }} />
         <View
           style={{
             height: 110,

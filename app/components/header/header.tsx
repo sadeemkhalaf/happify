@@ -7,6 +7,7 @@ import { Icon } from "../icon/icon"
 import { spacing } from "../../theme"
 import { translate } from "../../i18n/"
 import { moderateScale } from "../../theme/dimensionUtils"
+import { IconButton } from "../../../assets/images/svgs"
 
 // static styles
 const ROOT: ViewStyle = {
@@ -14,11 +15,11 @@ const ROOT: ViewStyle = {
   paddingTop: spacing[5],
   paddingBottom: spacing[5],
   justifyContent: "flex-start",
-  marginTop: 32,
+  marginTop: moderateScale(32),
   alignItems: "flex-start",
 }
 
-const TITLE: TextStyle = { textAlign: "left", fontWeight: "900", fontSize: 30 }
+const TITLE: TextStyle = { textAlign: "left", fontWeight: "900", fontSize: moderateScale(30) }
 const PLAYERTITLE: TextStyle = { textAlign: "center", fontSize: moderateScale(13) }
 const PLAYERSUBHEADER: TextStyle = {
   textAlign: "center",
@@ -26,8 +27,8 @@ const PLAYERSUBHEADER: TextStyle = {
   fontSize: moderateScale(14),
 }
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
-const LEFT: ViewStyle = { width: 32 }
-const RIGHT: ViewStyle = { width: 32 }
+const LEFT: ViewStyle = { width: moderateScale(32) }
+const RIGHT: ViewStyle = { width: moderateScale(32) }
 
 /**
  * Header that appears on many screens. Will hold navigation buttons and screen title.
@@ -47,11 +48,19 @@ export function Header(props: HeaderProps) {
   } = props
   const header = headerText || (headerTx && translate(headerTx)) || ""
 
+  const leftIconStyle: ViewStyle = {
+    paddingLeft: moderateScale(24),
+  }
+
+  const rightIconStyle: ViewStyle = {
+    paddingRight: moderateScale(24),
+  }
+
   return (
     <View style={[ROOT, style]}>
       {leftIcon ? (
         <Button preset="link" onPress={onLeftPress}>
-          <Icon icon={leftIcon} />
+          {IconButton(leftIcon, onLeftPress, leftIconStyle)}
         </Button>
       ) : (
         <View style={LEFT} />
@@ -62,7 +71,7 @@ export function Header(props: HeaderProps) {
       </View>
       {rightIcon ? (
         <Button preset="link" onPress={onRightPress}>
-          <Icon icon={rightIcon} />
+          {IconButton(leftIcon, onRightPress, rightIconStyle)}
         </Button>
       ) : (
         <View style={RIGHT} />

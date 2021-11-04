@@ -1,10 +1,9 @@
-import { LinearGradient } from "expo-linear-gradient"
 import React, { useState } from "react"
+import { LinearGradient } from "expo-linear-gradient"
 import { TextInput, View, ViewStyle } from "react-native"
-
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
-import { scaleByDeviceWidth } from "../../theme/dimensionUtils"
+import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("")
@@ -21,13 +20,13 @@ const SearchScreen = () => {
       <View
         style={[
           {
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            borderWidth: 1,
+            paddingVertical: moderateScale(8),
+            paddingHorizontal: moderateScale(16),
+            borderWidth: moderateScale(1),
             display: "flex",
-            marginRight: 8,
-            marginTop: 16,
-            borderRadius: 20,
+            marginRight: moderateScale(8),
+            marginTop: moderateScale(16),
+            borderRadius: moderateScale(20),
             borderColor: "#707070",
           },
           selected ? SELECTED : UNSELECTED,
@@ -40,8 +39,13 @@ const SearchScreen = () => {
 
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
-      <Screen preset={"fixed"} backgroundColor={"transparent"} style={{ paddingHorizontal: 24, alignItems: "center" }}>
-        <Header headerText={"Search"} titleStyle={{ left: -24 }} />
+      <Screen
+        unsafe
+        preset={"fixed"}
+        backgroundColor={"transparent"}
+        style={{ paddingHorizontal: scaleByDeviceWidth(24), alignItems: "center" }}
+      >
+        <Header headerText={"Search"} titleStyle={{ left: moderateScale(-32) }} />
         <View
           style={{
             display: "flex",
@@ -53,9 +57,9 @@ const SearchScreen = () => {
         >
           <TextInput
             style={{
-              height: 56,
-              borderRadius: 13,
-              paddingHorizontal: 24,
+              height: scaleByDeviceWidth(56),
+              borderRadius: scaleByDeviceWidth(13),
+              paddingHorizontal: scaleByDeviceWidth(24),
               backgroundColor: color.palette.white,
               width: "90%",
             }}
@@ -65,24 +69,35 @@ const SearchScreen = () => {
             clearButtonMode={"while-editing"}
             autoFocus
             placeholderTextColor={"#938BAC"}
-            multiline={false} 
+            multiline={false}
             maxLength={50}
           />
-          <Text style={{ fontWeight: "600", marginLeft: scaleByDeviceWidth(16), color: "#B87BF2" }} onPress={() => {}}>
+          <Text
+            style={{ fontWeight: "600", marginLeft: scaleByDeviceWidth(16), color: "#B87BF2" }}
+            onPress={() => {}}
+          >
             {"Go!"}
           </Text>
         </View>
-        <View style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: 'flex-start' }}>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "flex-start",
+          }}
+        >
           {renderFilterChip("Artist")}
           {renderFilterChip("Track")}
         </View>
         <View style={{ flex: 0.6, justifyContent: "center" }}>
-        <Text
+          <Text
             style={{
               fontWeight: "900",
               color: color.palette.white,
               textAlign: "center",
-              fontSize: 14,
+              fontSize: scaleByDeviceWidth(16),
+              marginBottom: scaleByDeviceWidth(8),
             }}
             onPress={() => {}}
           >
@@ -91,7 +106,7 @@ const SearchScreen = () => {
           <Text
             style={{
               fontWeight: "400",
-              fontSize: 12,
+              fontSize: scaleByDeviceWidth(12),
               color: color.palette.offWhite,
               textAlign: "center",
             }}

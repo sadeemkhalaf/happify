@@ -7,30 +7,32 @@ import {
   Image,
   ImageRequireSource,
   TouchableOpacity,
+  Platform,
 } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dimensionUtils"
 import { PlayWhite } from "../../../assets/images/svgs"
+import { useNavigation } from "@react-navigation/native"
 
 const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
 
 const ShadowEffect: ViewStyle = {
   shadowColor: "#413D4D",
   shadowOffset: {
-    width: -30,
-    height: -65,
+    width: moderateScale(-30),
+    height: moderateScale(-65),
   },
   shadowOpacity: 1,
-  shadowRadius: 22,
-  elevation: 30,
+  shadowRadius: moderateScale(22),
+  elevation: moderateScale(30),
   width: "150%",
-  height: 120,
+  height: moderateScale(120),
   backgroundColor: "#413D4D",
 }
 
-const absoluteBox: ViewStyle = { position: "relative", top: 230, zIndex: 3 }
+const absoluteBox: ViewStyle = { position: "relative", top: moderateScale(230), zIndex: 3 }
 
 export const renderShadowBox = () => {
   return (
@@ -41,6 +43,8 @@ export const renderShadowBox = () => {
 }
 
 const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
+  const { navigate } = useNavigation()
+
   return (
     <TouchableOpacity
       style={{
@@ -50,6 +54,7 @@ const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
         justifyContent: "space-between",
         alignItems: "center",
       }}
+      onPress={() => navigate("player")}
     >
       <View style={{ width: "85%" }}>
         <Text
@@ -80,21 +85,22 @@ const PLAYERSUBHEADER: TextStyle = {
 }
 
 const AlbumScreen = () => {
+  const navigate = useNavigation()
+  const handleClose = () => {
+    console.log("close")
+
+    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("explore")
+  }
+
   return (
     <LinearGradient colors={["#413D4D", "#413D4D"]} style={BG_GRADIENT}>
-      <Header
-        style={{ zIndex: 2, marginTop: 0 }}
-        isPlayer
-        headerText={"The-Astronaut"}
-        subheader={"Released 2020"}
-      />
       <View
         style={[
           {
             position: "absolute",
             top: 0,
             width: "100%",
-            height: 200,
+            height: moderateScale(200),
             backgroundColor: color.palette.deepPurple,
             zIndex: -1,
           },
@@ -109,11 +115,18 @@ const AlbumScreen = () => {
         />
       </View>
       <Screen
-        unsafe
         preset={"fixed"}
         backgroundColor={"transparent"}
-        style={{ paddingHorizontal: 24, alignItems: "center" }}
+        style={{ paddingHorizontal: moderateScale(24), alignItems: "center" }}
       >
+        <Header
+          style={{ zIndex: 1, marginTop: Platform.OS !== "ios" ? 0 : moderateScale(-32), width: windowWidth }}
+          isPlayer
+          headerText={"The-Astronaut"}
+          subheader={"Released 2020"}
+          leftIcon={"close"}
+          onLeftPress={handleClose}
+        />
         <View
           style={{
             minHeight: scaleByDeviceWidth(100),
