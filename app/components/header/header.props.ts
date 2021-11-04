@@ -1,6 +1,7 @@
 import { StyleProp, TextStyle, ViewStyle } from "react-native"
 import { IconTypes } from "../icon/icons"
 import { TxKeyPath } from "../../i18n"
+import { Icons } from "../../../assets/images/svgs"
 
 export interface HeaderProps {
   /**
@@ -16,7 +17,7 @@ export interface HeaderProps {
   /**
    * Icon that should appear on the left
    */
-  leftIcon?: IconTypes
+  leftIcon?: IconTypes | Icons
 
   /**
    * What happens when you press the left icon
@@ -26,7 +27,7 @@ export interface HeaderProps {
   /**
    * Icon that should appear on the right
    */
-  rightIcon?: IconTypes
+  rightIcon?: IconTypes | Icons
 
   /**
    * What happens when you press the right icon
@@ -44,7 +45,7 @@ export interface HeaderProps {
   titleStyle?: StyleProp<TextStyle>
 
   /*  If is in player screen **/
-  isPlayer?: boolean;
+  isPlayer?: boolean
 
-  subheader?: string;
+  subheader?: string
 }

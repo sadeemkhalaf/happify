@@ -1,0 +1,4 @@
+<svg id="Group_24" data-name="Group 24" xmlns="http://www.w3.org/2000/svg" width="22.388" height="16.887" viewBox="0 0 22.388 16.887">
+  <path id="Icon_awesome-play" data-name="Icon awesome-play" d="M14,7.082,2.388.219A1.574,1.574,0,0,0,0,1.581V15.3a1.582,1.582,0,0,0,2.388,1.362L14,9.806a1.581,1.581,0,0,0,0-2.724Z" transform="translate(0 -0.002)" fill="#fff"/>
+  <path id="Icon_awesome-pause" data-name="Icon awesome-pause" d="M14.775,15.372V3.763A1.583,1.583,0,0,0,13.192,2.18H10.026A1.583,1.583,0,0,0,8.443,3.763V15.372a1.583,1.583,0,0,0,1.583,1.583h3.166A1.583,1.583,0,0,0,14.775,15.372Z" transform="translate(7.612 -1.18)" fill="#fff"/>
+</svg>

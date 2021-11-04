@@ -1,16 +1,30 @@
 import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
 import React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
+import { moderateScale } from "../../theme/dimensionUtils"
+
+const ShadowEffect: ViewStyle = {
+  shadowColor: "#2f2730",
+  shadowOffset: {
+    width: 10,
+    height: 10,
+  },
+  shadowOpacity: 0.27,
+  shadowRadius: 4.65,
+
+  elevation: 6,
+}
 
 const ExpoloreScreen = () => {
   const { navigate } = useNavigation()
 
   const renderAlbumSquare = (isFirst?: boolean) => (
-    <View
+    <TouchableOpacity
+      onPress={() => navigate("album")}
       style={[
         {
           height: 167,
@@ -19,13 +33,14 @@ const ExpoloreScreen = () => {
           borderRadius: 13,
         },
         isFirst ? { marginRight: 6 } : { marginHorizontal: 6 },
+        ShadowEffect,
       ]}
     />
   )
   const renderTrackSquare = (isFirst?: boolean) => (
     <View style={{ justifyContent: "center", alignItems: "flex-start" }}>
       <TouchableOpacity
-        onPress={() => navigate('player')}
+        onPress={() => navigate("player")}
         style={[
           {
             height: 110,
@@ -35,6 +50,7 @@ const ExpoloreScreen = () => {
             marginBottom: 4,
           },
           isFirst ? { marginRight: 5 } : { marginHorizontal: 5 },
+          ShadowEffect,
         ]}
       />
       <Text
@@ -51,8 +67,8 @@ const ExpoloreScreen = () => {
 
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
-      <Screen preset={"scroll"} backgroundColor={"#ffffff00"} style={{ paddingHorizontal: 24 }}>
-        <Header headerText={"Explore"} titleStyle={{ left: -24 }} />
+      <Screen preset={"scroll"} backgroundColor={"transparent"} style={{ paddingHorizontal: 24 }}>
+        <Header headerText={"Explore"} titleStyle={{ left: moderateScale(-32) }} />
         <View
           style={{
             height: 110,

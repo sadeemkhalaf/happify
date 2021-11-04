@@ -7,6 +7,7 @@ import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
 import millisToMin from "../../utils/millisToMin"
+import { useNavigation } from "@react-navigation/core"
 
 const tracker: ViewStyle = {
   width: "100%",
@@ -14,21 +15,33 @@ const tracker: ViewStyle = {
   marginTop: 32,
 }
 
-const PlayerScreen = () => {
+const PlayerScreen = ({ track = {} }) => {
   const MAX = 323333
   const MIN = 0
   const [current, setCurrent] = useState(MIN)
-
+  
   const updateCurrent = (change) => setCurrent(change)
+  
+  const navigate = useNavigation()
+  const handleClose = () => {
+    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("album")
+  }
 
   return (
     <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
+      <Header
+        isPlayer
+        headerText={"Playing from Artist"}
+        subheader={"THE-Album"}
+        leftIcon={"close"}
+        onLeftPress={handleClose}
+      />
       <Screen
+        unsafe
         preset={"scroll"}
-        backgroundColor={"#ffffff00"}
+        backgroundColor={"transparent"}
         style={{ paddingHorizontal: 24, alignItems: "center" }}
       >
-        <Header isPlayer headerText={"Playing from Artist"} subheader={"THE-Album"} />
         <View
           style={{
             width: scaleByDeviceWidth(342),
@@ -81,7 +94,6 @@ const PlayerScreen = () => {
             <Text text={millisToMin(MAX)} />
           </View>
         </View>
-        
       </Screen>
     </LinearGradient>
   )

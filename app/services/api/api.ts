@@ -40,9 +40,42 @@ export class Api {
       timeout: this.config.timeout,
       headers: {
         Accept: "application/json",
+        "x-happi-key": "8742c6U7Yzl8udLqg17aGJUwmAZos5Bj9SY9pPMd25jGsMnaWKQkA1IY",
+        "apikey": "8742c6U7Yzl8udLqg17aGJUwmAZos5Bj9SY9pPMd25jGsMnaWKQkA1IY",
       },
     })
   }
+
+
+    /**
+   * Gets a list of Albums by artist id.
+   */
+     async getAlbums(): Promise<Types.GetUsersResult> {
+      // make the api call
+      const response: ApiResponse<any> = await this.apisauce.get(`/users`)
+  
+      // the typical ways to die when calling an api
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) return problem
+      }
+  
+      const convertUser = (raw) => {
+        return {
+          id: raw.id,
+          name: raw.name,
+        }
+      }
+  
+      // transform the data into the format we are expecting
+      try {
+        const rawUsers = response.data
+        const resultUsers: Types.User[] = rawUsers.map(convertUser)
+        return { kind: "ok", users: resultUsers }
+      } catch {
+        return { kind: "bad-data" }
+      }
+    }
 
   /**
    * Gets a list of users.
