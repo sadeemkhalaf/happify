@@ -8,6 +8,8 @@ import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
 import millisToMin from "../../utils/millisToMin"
 import { useNavigation } from "@react-navigation/core"
+import FastImage from "react-native-fast-image"
+import { API_KEY } from "../../services/api/api-config"
 
 const tracker: ViewStyle = {
   width: "100%",
@@ -15,10 +17,16 @@ const tracker: ViewStyle = {
   marginTop: 32,
 }
 
-const PlayerScreen = ({ track = {} }) => {
+const PlayerScreen = ({ route, navigation }) => {
   const MAX = 323333
   const MIN = 0
   const [current, setCurrent] = useState(MIN)
+
+  const { track, cover } = route.params;
+
+  console.log('track: ', track);
+  
+  
   
   const updateCurrent = (change) => setCurrent(change)
   
@@ -49,7 +57,9 @@ const PlayerScreen = ({ track = {} }) => {
             backgroundColor: color.palette.offWhite,
             borderRadius: scaleByDeviceWidth(13),
           }}
-        />
+        >
+             {cover && <FastImage style={{ height: '100%', width: '100%' }} source={{ uri: cover, headers: { "x-happi-key": API_KEY } }} />}
+        </View>
         <View
           style={{ alignItems: "flex-start", width: "100%", marginTop: scaleByDeviceWidth(32) }}
         >

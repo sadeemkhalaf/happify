@@ -19,6 +19,7 @@ import {
 } from "../screens"
 import { getTabBarIcon, navigationRef } from "./navigation-utilities"
 import { moderateScale, scaleByDeviceWidth } from "../theme/dimensionUtils"
+import { Track } from "../services/api"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,7 +41,7 @@ export type TabsNavigatorParamList = {
 
 export type NavigatorParamList = {
   primaryStack: undefined
-  player: { trackId?: any }
+  player: { track?: Track ,trackId?: any, coverUri?: string }
   artist: { artistId?: any }
   album: { artistId?: any; albumId?: any }
 }
@@ -77,7 +78,7 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
+    <Stack.Navigator  
       screenOptions={{
         gestureEnabled: true,
         orientation: "portrait",

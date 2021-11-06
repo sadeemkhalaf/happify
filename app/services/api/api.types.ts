@@ -1,5 +1,6 @@
 import { GeneralApiProblem } from "./api-problem"
 import { Character } from "../../models/character/character"
+import { ApiOkResponse } from "apisauce";
 
 export interface User {
   id: number
@@ -60,28 +61,28 @@ export interface Album {
   api_tracks: string
 }
 
+export type ApiResponseType = Promise<void | ApiOkResponse<any> | GeneralApiProblem>;
 
 // get each type
-export type GetArtistResult = { kind: "ok"; result: Artist } | GeneralApiProblem
-export type GetAlbumResult = { kind: "ok"; result: Album } | GeneralApiProblem
-export type GetTrackResult = { kind: "ok"; result: Track } | GeneralApiProblem
+export type GetArtistResult = { success: boolean, length?: number, result: Artist } | GeneralApiProblem
+export type GetAlbumResult = { success: boolean, length?: number,result: Album } | GeneralApiProblem
+export type GetTrackResult = { success: boolean, length?: number,result: Track } | GeneralApiProblem
 
 // artist albums and tracks
-export type GetArtistAlbumsResult = { kind: "ok"; result: Album[], length?: number } | GeneralApiProblem
-export type GetArtistAlbumTracksResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
+export type GetArtistAlbumsResult = { success: boolean ,result: Album[]; length?: number } | GeneralApiProblem
+export type GetArtistAlbumTracksResult = {success: boolean, result: Track[]; length?: number } | GeneralApiProblem
 
-//search results
-export type GetTracksSearchResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
-export type GetArtistsSearchResult = { kind: "ok"; result: Artist[], length?: number } | GeneralApiProblem
+// search results
+export type GetTracksSearchResult = { success: boolean, result: Track[]; length?: number } | GeneralApiProblem
+export type GetArtistsSearchResult = { success: boolean, result: Artist[]; length?: number } | GeneralApiProblem
 
-//Album tracks
-export type GetAlbumsResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
+// Album tracks
+export type GetAlbumsResult = { success: boolean, result: Track[]; length?: number } | GeneralApiProblem
 
-export type GetSmartPlaylistResult = { kind: "ok"; result: Track[], length?: number } | GeneralApiProblem
+export type GetSmartPlaylistResult = {success: boolean, result: Track[]; length?: number } | GeneralApiProblem
 
+export type GetUsersResult = { users: User[] } | GeneralApiProblem
+export type GetUserResult = { user: User } | GeneralApiProblem
 
-export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
-export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
-
-export type GetCharactersResult = { kind: "ok"; characters: Character[] } | GeneralApiProblem
-export type GetCharacterResult = { kind: "ok"; character: Character } | GeneralApiProblem
+export type GetCharactersResult = { characters: Character[] } | GeneralApiProblem
+export type GetCharacterResult = { character: Character } | GeneralApiProblem

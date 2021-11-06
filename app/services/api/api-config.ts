@@ -1,7 +1,8 @@
 // Use this import if you want to use "env.js" file
 // const { API_URL } = require("../../config/env")
 // Or just specify it directly like this:
-const API_URL = "https://api.happi.dev/v1/music"
+export const API_URL = "https://api.happi.dev/v1/music";
+export const API_KEY = "8742c6U7Yzl8udLqg17aGJUwmAZos5Bj9SY9pPMd25jGsMnaWKQkA1IY";
 
 export enum searchKey {
   ARTIST = "artists",
@@ -18,7 +19,6 @@ export const generateTrackUrl = (artistId: number, albumId: number) => {
   //  /artists/:id_artist/albums/:id_album/tracks/:id_track
   return `${artist_url}${artistId}${album_url}${albumId}`
 }
-
 
 /**
  * The options used to configure the API.
