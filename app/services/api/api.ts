@@ -1,6 +1,13 @@
 import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
-import { ApiConfig, API_KEY, DEFAULT_API_CONFIG } from "./api-config"
+import {
+  album_url,
+  ApiConfig,
+  API_KEY,
+  artist_url,
+  DEFAULT_API_CONFIG,
+  smart_playlist,
+} from "./api-config"
 import { ApiResponseType } from "./api.types"
 import { Alert } from "react-native"
 
@@ -75,6 +82,37 @@ export class Api {
     } catch (err) {
       this.handleAPIError(err)
     }
+  }
+
+  // get smart playlist
+  public async getSmartPlaylist(artist_id = 19155) {
+    return this.getRequest(`${artist_url}/${artist_id}${smart_playlist}`)
+  }
+
+  // get tracks
+  public async getAllTracks(artist_id: number = 19155, album_id: number) {
+    return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+  }
+
+  // get albums
+  public async getAllArtistAlbums(artist_id: number = 19155) {
+    return this.getRequest(`${artist_url}/${artist_id}${album_url}/`)
+  }
+
+  // get albums
+  public async getAllArtistAlbum(artist_id: number = 19155, album_id: number) {
+    return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+  }
+
+  // get aartist
+  public async getArtist(artist_id: number = 19155) {
+    return this.getRequest(`${artist_url}/${artist_id}`)
+  }
+
+  // get search results
+  public async getSearchResults(searchQuery: string, type: string[] = ["track"]) {
+    const stringifyType = type.join(',');
+    return this.getRequest(``, { q: searchQuery, lyrics: 1, limit: 50, type: stringifyType })
   }
 }
 

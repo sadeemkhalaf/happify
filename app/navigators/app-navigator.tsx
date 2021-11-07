@@ -20,6 +20,7 @@ import {
 import { getTabBarIcon, navigationRef } from "./navigation-utilities"
 import { moderateScale, scaleByDeviceWidth } from "../theme/dimensionUtils"
 import { Track } from "../services/api"
+import { color } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -55,14 +56,14 @@ const TabsNav = () => (
       tabBarStyle: {
         height: scaleByDeviceWidth(75),
         paddingBottom: scaleByDeviceWidth(8),
-        backgroundColor: "#46454B",
+        backgroundColor: color.palette.grey.type5,
       },
       tabBarLabelStyle: { fontSize: moderateScale(15) },
       tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name),
       headerShown: false,
       headerShadowVisible: false,
-      tabBarInactiveTintColor: "#A3A2A5",
-      tabBarActiveTintColor: "#dc8eeb",
+      tabBarInactiveTintColor: color.palette.purpleActive.typeInactive,
+      tabBarActiveTintColor: color.palette.purpleActive.typeActive,
       tabBarHideOnKeyboard: true,
     })}
     initialRouteName={"explore"}

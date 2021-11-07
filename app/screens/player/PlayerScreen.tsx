@@ -1,15 +1,14 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { View, ViewStyle } from "react-native"
-import Slider from "@react-native-community/slider"
 import { LinearGradient } from "expo-linear-gradient"
 
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
-import millisToMin from "../../utils/millisToMin"
 import { useNavigation } from "@react-navigation/core"
 import FastImage from "react-native-fast-image"
-import { API_KEY } from "../../services/api/api-config"
+import { API_KEY, generateTrackUrl } from "../../services/api/api-config"
+import { AuthApiService } from "./../../services/api"
 
 const tracker: ViewStyle = {
   width: "100%",
@@ -18,29 +17,36 @@ const tracker: ViewStyle = {
 }
 
 const PlayerScreen = ({ route, navigation }) => {
-  const MAX = 323333
-  const MIN = 0
-  const [current, setCurrent] = useState(MIN)
+  // const MAX = 323333
+  // const MIN = 0
+  // const [current, setCurrent] = useState(MIN)
 
-  const { track, cover } = route.params;
-
-  console.log('track: ', track);
-  
-  
-  
-  const updateCurrent = (change) => setCurrent(change)
-  
+  const [trackLyrics, setLyrics] = useState()
   const navigate = useNavigation()
+  const { track, cover } = route.params
+
+  useEffect(() => {
+    const path = generateTrackUrl(track.id_artist, track.id_album)
+    {
+      track.haslyrics &&
+        AuthApiService.getRequest(`${path}/tracks/${track.id_track}/lyrics`).then((data) => {
+          setLyrics(data.result)
+        })
+    }
+  }, [])
   const handleClose = () => {
     navigate.canGoBack() ? navigate.goBack() : navigate.navigate("album")
   }
 
   return (
-    <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
+    <LinearGradient
+      colors={[color.palette.grey.type1, color.palette.grey.type2]}
+      style={BG_GRADIENT}
+    >
       <Header
         isPlayer
-        headerText={"Playing from Artist"}
-        subheader={"THE-Album"}
+        headerText={`Playing from ${track.artist || "Unknown Artist"}`}
+        subheader={track.album || "Undefined Album"}
         leftIcon={"close"}
         onLeftPress={handleClose}
       />
@@ -58,7 +64,12 @@ const PlayerScreen = ({ route, navigation }) => {
             borderRadius: scaleByDeviceWidth(13),
           }}
         >
-             {cover && <FastImage style={{ height: '100%', width: '100%' }} source={{ uri: cover, headers: { "x-happi-key": API_KEY } }} />}
+          {cover && (
+            <FastImage
+              style={{ height: "100%", width: "100%" }}
+              source={{ uri: cover, headers: { "x-happi-key": API_KEY } }}
+            />
+          )}
         </View>
         <View
           style={{ alignItems: "flex-start", width: "100%", marginTop: scaleByDeviceWidth(32) }}
@@ -69,25 +80,42 @@ const PlayerScreen = ({ route, navigation }) => {
               fontSize: moderateScale(18),
               marginBottom: moderateScale(8),
             }}
-            text={"Track Name"}
+            text={track.track}
             txOptions={{ defaultValue: "track undefined" }}
           />
           <Text
             style={{
               fontWeight: "normal",
               fontSize: moderateScale(16),
-              color: color.palette.offWhite,
+              color: color.palette.grey.type3,
             }}
-            text={"Artist Name"}
+            text={track.artist}
             txOptions={{ defaultValue: "artist undefined" }}
           />
         </View>
-        <View style={tracker}>
+
+        {trackLyrics && (
+          <View style={{ marginTop: moderateScale(16), marginBottom: moderateScale(32) }}>
+            <Text
+              style={{
+                fontWeight: "normal",
+                fontSize: moderateScale(18),
+                color: color.palette.white,
+                lineHeight: moderateScale(26),
+              }}
+              text={trackLyrics?.lyrics}
+              txOptions={{ defaultValue: "track has no lyrics!" }}
+            />
+          </View>
+        )}
+
+        {/* TODO: integration of sound player with another API */}
+        {/* <View style={tracker}>
           <Slider
             minimumValue={MIN}
             maximumValue={MAX}
-            minimumTrackTintColor="#B87BF2"
-            thumbTintColor="#B87BF2"
+            minimumTrackTintColor={color.palette.purple.type1}
+            thumbTintColor={color.palette.purple.type1}
             maximumTrackTintColor={color.palette.white}
             value={current}
             onValueChange={updateCurrent}
@@ -103,7 +131,8 @@ const PlayerScreen = ({ route, navigation }) => {
             <Text text={millisToMin(current)} />
             <Text text={millisToMin(MAX)} />
           </View>
-        </View>
+        </View> */}
+        <View style={tracker}></View>
       </Screen>
     </LinearGradient>
   )

@@ -8,16 +8,17 @@ export enum searchKey {
   ARTIST = "artists",
   TRACK = "tracks",
   ALBUM = "albums",
+  SMART_PLAYLIST = "smart-playlist"
 }
 
 // base urls
-export const artist_url = `/${searchKey.ARTIST}/`
-export const album_url = `/${searchKey.ALBUM}/`
+export const artist_url = `/${searchKey.ARTIST}`
+export const album_url = `/${searchKey.ALBUM}`
+export const smart_playlist = `/${searchKey.SMART_PLAYLIST}`
 
 export const generateTrackUrl = (artistId: number, albumId: number) => {
-  // result:
   //  /artists/:id_artist/albums/:id_album/tracks/:id_track
-  return `${artist_url}${artistId}${album_url}${albumId}`
+  return `${artist_url}/${artistId}${album_url}/${albumId}`
 }
 
 /**

@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native"
 const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
 
 const ShadowEffect: ViewStyle = {
-  shadowColor: "#413D4D",
+  shadowColor: color.palette.grey.type1,
   shadowOffset: {
     width: moderateScale(-30),
     height: moderateScale(-65),
@@ -29,7 +29,7 @@ const ShadowEffect: ViewStyle = {
   elevation: moderateScale(30),
   width: "150%",
   height: moderateScale(120),
-  backgroundColor: "#413D4D",
+  backgroundColor: color.palette.grey.type1,
 }
 
 const absoluteBox: ViewStyle = { position: "relative", top: moderateScale(230), zIndex: 3 }
@@ -93,7 +93,7 @@ const AlbumScreen = () => {
   }
 
   return (
-    <LinearGradient colors={["#413D4D", "#413D4D"]} style={BG_GRADIENT}>
+    <LinearGradient colors={[color.palette.grey.type1, color.palette.grey.type1]} style={BG_GRADIENT}>
       <View
         style={[
           {
