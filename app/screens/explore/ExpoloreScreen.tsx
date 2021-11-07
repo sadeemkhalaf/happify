@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from "react"
+import { ActivityIndicator, ScrollView, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
-import { ScrollView, View, ViewStyle } from "react-native"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale } from "../../theme/dimensionUtils"
-import { AuthApiService, Track } from "../../services/api"
+import { AuthApiService } from "../../services/api"
 import { renderTrackSquare, renderAlbumSquare } from "./style"
 
 export const ShadowEffect: ViewStyle = {
@@ -29,14 +29,17 @@ const scrollViewStyle: ViewStyle = {
 
 const ExpoloreScreen = () => {
   const { navigate } = useNavigation()
-  const [tracks, setTracks] = useState<Track[]>([])
+  const [tracks, setTracks] = useState<any[]>([])
 
   useEffect(() => {
     AuthApiService.getSmartPlaylist(81946)
       .then((data) => {
-        setTracks(data.result)
+        data?.success ? setTracks(data?.result) : setTracks([])
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        console.log(error)
+        setTracks([])
+      })
   }, [])
 
   return (
@@ -44,6 +47,7 @@ const ExpoloreScreen = () => {
       colors={[color.palette.grey.type1, color.palette.grey.type2]}
       style={BG_GRADIENT}
     >
+       <ActivityIndicator size="small" color={color.palette.purple.type4}/>
       <Screen
         preset={"scroll"}
         backgroundColor={"transparent"}

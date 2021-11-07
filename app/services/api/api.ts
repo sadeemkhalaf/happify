@@ -77,7 +77,7 @@ export class Api {
         const problem = getGeneralApiProblem(response)
         if (problem) throw problem
       } else {
-        return response.data
+        return response?.data
       }
     } catch (err) {
       this.handleAPIError(err)
@@ -86,33 +86,57 @@ export class Api {
 
   // get smart playlist
   public async getSmartPlaylist(artist_id = 19155) {
-    return this.getRequest(`${artist_url}/${artist_id}${smart_playlist}`)
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${smart_playlist}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
   }
 
   // get tracks
   public async getAllTracks(artist_id: number = 19155, album_id: number) {
-    return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
   }
 
   // get albums
   public async getAllArtistAlbums(artist_id: number = 19155) {
-    return this.getRequest(`${artist_url}/${artist_id}${album_url}/`)
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${album_url}/`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
   }
 
   // get albums
   public async getAllArtistAlbum(artist_id: number = 19155, album_id: number) {
-    return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
   }
 
   // get aartist
   public async getArtist(artist_id: number = 19155) {
-    return this.getRequest(`${artist_url}/${artist_id}`)
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
   }
 
   // get search results
   public async getSearchResults(searchQuery: string, type: string[] = ["track"]) {
-    const stringifyType = type.join(',');
-    return this.getRequest(``, { q: searchQuery, lyrics: 1, limit: 50, type: stringifyType })
+    try {
+      const stringifyType = type.join(",")
+      return this.getRequest(``, { q: searchQuery, lyrics: 1, limit: 50, type: stringifyType })
+    } catch (err) {
+      this.handleAPIError(err)
+    }
   }
 }
 

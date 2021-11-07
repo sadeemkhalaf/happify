@@ -17,10 +17,6 @@ const tracker: ViewStyle = {
 }
 
 const PlayerScreen = ({ route, navigation }) => {
-  // const MAX = 323333
-  // const MIN = 0
-  // const [current, setCurrent] = useState(MIN)
-
   const [trackLyrics, setLyrics] = useState()
   const navigate = useNavigation()
   const { track, cover } = route.params
@@ -36,6 +32,12 @@ const PlayerScreen = ({ route, navigation }) => {
   }, [])
   const handleClose = () => {
     navigate.canGoBack() ? navigate.goBack() : navigate.navigate("album")
+  }
+
+  const handleNavToArtist = () => {
+    console.log(track.id_artist);
+    
+    navigate.navigate("artist", {artistId: track.id_artist})
   }
 
   return (
@@ -90,11 +92,11 @@ const PlayerScreen = ({ route, navigation }) => {
               color: color.palette.grey.type3,
             }}
             text={track.artist}
-            txOptions={{ defaultValue: "artist undefined" }}
+            onPress={handleNavToArtist}
           />
         </View>
 
-        {trackLyrics && (
+        {/* {trackLyrics && ( */}
           <View style={{ marginTop: moderateScale(16), marginBottom: moderateScale(32) }}>
             <Text
               style={{
@@ -103,11 +105,11 @@ const PlayerScreen = ({ route, navigation }) => {
                 color: color.palette.white,
                 lineHeight: moderateScale(26),
               }}
-              text={trackLyrics?.lyrics}
+              text={trackLyrics?.lyrics || "track has no lyrics!"}
               txOptions={{ defaultValue: "track has no lyrics!" }}
             />
           </View>
-        )}
+        {/* )} */}
 
         {/* TODO: integration of sound player with another API */}
         {/* <View style={tracker}>

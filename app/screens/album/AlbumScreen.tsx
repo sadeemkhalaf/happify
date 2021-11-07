@@ -13,7 +13,6 @@ import { LinearGradient } from "expo-linear-gradient"
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dimensionUtils"
-import { PlayWhite } from "../../../assets/images/svgs"
 import { useNavigation } from "@react-navigation/native"
 
 const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
@@ -75,13 +74,6 @@ const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
       {withPlayButton && <PlayWhite width={14} height={14} />}
     </TouchableOpacity>
   )
-}
-
-const PLAYERTITLE: TextStyle = { textAlign: "center", fontSize: moderateScale(13) }
-const PLAYERSUBHEADER: TextStyle = {
-  textAlign: "center",
-  fontWeight: "bold",
-  fontSize: moderateScale(14),
 }
 
 const AlbumScreen = () => {
