@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { View, Platform, ScrollView, ViewStyle } from "react-native"
+import { View } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import FastImage from "react-native-fast-image"
 import { renderShadowBox } from ".."
-import { BG_GRADIENT, Header, Screen, Text } from "../../components"
+import { BG_GRADIENT, Screen, Text } from "../../components"
 import { color } from "../../theme"
-import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dimensionUtils"
+import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
 import { API_KEY } from "../../services/api/api-config"
 import { AuthApiService } from "../../services/api"
 import { renderAlbumSquare } from "../explore/style"
@@ -63,16 +63,7 @@ const ArtistScreen = ({ route }) => {
         backgroundColor={"transparent"}
         style={{ paddingHorizontal: moderateScale(24), alignItems: "center" }}
       >
-        <Header
-          style={{
-            zIndex: 1,
-            marginTop: Platform.OS !== "ios" ? 0 : moderateScale(-32),
-            width: windowWidth,
-          }}
-          isPlayer
-          headerText={artist?.artist || "Artist Unknown"}
-          leftIcon={"close"}
-        />
+
         <View
           style={{
             minHeight: scaleByDeviceWidth(100),
