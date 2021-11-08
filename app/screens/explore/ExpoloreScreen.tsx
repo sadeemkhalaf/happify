@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
 import FastImage from "react-native-fast-image"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
+import { Api } from "../../services/api/api"
 import { color } from "../../theme"
 import { moderateScale } from "../../theme/dimensionUtils"
 import { AuthApiService } from "../../services/api"
@@ -33,8 +34,16 @@ const scrollViewStyle: ViewStyle = {
 }
 
 const ExpoloreScreen = () => {
+
   const [tracks, setTracks] = useState<any[]>([])
   const [albums, setAlbums] = useState<any[]>([])
+
+  const { navigate } = useNavigation()
+  const apiService = new Api()
+
+  useEffect(() => {
+    apiService.getArtists().then((res) => console.log(res))
+  }, [])
 
   //artist: 192169
 
