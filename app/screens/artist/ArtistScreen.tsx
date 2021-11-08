@@ -60,7 +60,6 @@ const ArtistScreen = ({ route }) => {
         headerText={"Artist"}
         titleStyle={{ textAlign: "center", fontSize: moderateScale(22) }}
         style={{
-          marginTop: moderateScale(8),
           width: "100%",
           alignItems: "center",
         }}

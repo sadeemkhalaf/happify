@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, ImageRequireSource, ScrollView, View, ViewStyle } from "react-native"
-import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
 import FastImage from "react-native-fast-image"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
