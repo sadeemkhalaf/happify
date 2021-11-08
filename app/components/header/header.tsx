@@ -3,11 +3,10 @@ import { View, ViewStyle, TextStyle } from "react-native"
 import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
-import { Icon } from "../icon/icon"
-import { spacing } from "../../theme"
+import { color, spacing } from "../../theme"
 import { translate } from "../../i18n/"
 import { moderateScale } from "../../theme/dimensionUtils"
-import { IconButton } from "../../../assets/images/svgs"
+import { IconButton } from "../IconButton"
 
 // static styles
 const ROOT: ViewStyle = {
@@ -49,7 +48,9 @@ export function Header(props: HeaderProps) {
   const header = headerText || (headerTx && translate(headerTx)) || ""
 
   const leftIconStyle: ViewStyle = {
-    paddingLeft: moderateScale(24),
+    marginLeft: moderateScale(24),
+    backgroundColor: color.palette.purple.type1,
+    borderRadius: moderateScale(30),
   }
 
   const rightIconStyle: ViewStyle = {

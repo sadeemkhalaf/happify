@@ -58,7 +58,7 @@ export const renderTrackSquare = (track?, isFirst?: boolean) => {
 }
 
 
-export const renderAlbumSquare = (isFirst?: boolean) => {
+export const renderAlbumSquare = (album ,id_artist, isFirst?: boolean) => {
   const albumStyle: ViewStyle = {
     height: moderateScale(167),
     width: moderateScale(167),
@@ -68,12 +68,17 @@ export const renderAlbumSquare = (isFirst?: boolean) => {
 
   return (
     <TouchableOpacity
-      onPress={() => navigate("album")}
+      onPress={() => navigate("album", { album: album, id_artist: id_artist })}
       style={[
         albumStyle,
         isFirst ? { marginRight: moderateScale(6) } : { marginHorizontal: moderateScale(6) },
         ShadowEffect,
       ]}
-    />
+    >
+       <FastImage
+              style={{ height: '100%', width: '100%', borderRadius: moderateScale(13) }}
+              source={{ uri: album?.cover, headers: { "x-happi-key": API_KEY } }}
+            />
+    </TouchableOpacity>
   )
 }

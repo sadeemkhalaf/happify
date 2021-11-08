@@ -52,6 +52,8 @@ const SearchScreen = () => {
           AuthApiService.getSearchResults(searchText).then((data) => {
             setIsSearching(false)
             setResults(data.result)
+            console.log(data.result);
+            
           })
         }
       } else {

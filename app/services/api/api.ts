@@ -120,6 +120,17 @@ export class Api {
     }
   }
 
+    // get album Tracks
+    public async getAllArtistAlbum(artist_id: number = 19155, album_id: number) {
+      try {
+        // artists/:id_artist/albums/:id_album/tracks
+
+        return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}/tracks`)
+      } catch (err) {
+        this.handleAPIError(err)
+      }
+    }
+
   // get aartist
   public async getArtist(artist_id: number = 19155) {
     try {

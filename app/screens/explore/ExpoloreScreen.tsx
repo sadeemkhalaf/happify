@@ -1,13 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from "react"
-import { ActivityIndicator, ScrollView, View, ViewStyle } from "react-native"
+import { ActivityIndicator, ImageRequireSource, ScrollView, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
+import FastImage from "react-native-fast-image"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale } from "../../theme/dimensionUtils"
 import { AuthApiService } from "../../services/api"
 import { renderTrackSquare, renderAlbumSquare } from "./style"
+import { API_KEY } from "../../services/api/api-config"
+import arrayShuffle from "array-shuffle"
+
+const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
 
 export const ShadowEffect: ViewStyle = {
   shadowColor: "#2f2730",
@@ -30,14 +35,30 @@ const scrollViewStyle: ViewStyle = {
 const ExpoloreScreen = () => {
   const { navigate } = useNavigation()
   const [tracks, setTracks] = useState<any[]>([])
+  const [albums, setAlbums] = useState<any[]>([])
+
+  //artist: 192169
+
+  const seedArtist = 36481;
 
   useEffect(() => {
-    AuthApiService.getSmartPlaylist(81946)
+    AuthApiService.getSmartPlaylist(seedArtist)
       .then((data) => {
         data?.success ? setTracks(data?.result) : setTracks([])
       })
       .catch((error) => {
         console.log(error)
+        setTracks([])
+      })
+
+    AuthApiService.getAllArtistAlbums(seedArtist)
+      .then((data) => {
+        const albumsList = arrayShuffle(data?.result.albums)
+
+        data?.success ? setAlbums(albumsList) : setAlbums([])
+      })
+      .catch((error) => {
+        setAlbums([])
         setTracks([])
       })
   }, [])
@@ -47,7 +68,7 @@ const ExpoloreScreen = () => {
       colors={[color.palette.grey.type1, color.palette.grey.type2]}
       style={BG_GRADIENT}
     >
-       <ActivityIndicator size="small" color={color.palette.purple.type4}/>
+      <ActivityIndicator size="small" color={color.palette.purple.type4} />
       <Screen
         preset={"scroll"}
         backgroundColor={"transparent"}
@@ -56,12 +77,22 @@ const ExpoloreScreen = () => {
         <Header headerText={"Explore"} titleStyle={{ left: moderateScale(-32) }} />
         <View
           style={{
-            height: 110,
+            height: moderateScale(110),
             width: "100%",
             backgroundColor: color.palette.white,
-            borderRadius: 8,
+            borderRadius: moderateScale(8),
           }}
-        ></View>
+        >
+          <FastImage
+            source={
+              albums.length > 0
+                ? { uri: albums[0]?.cover, headers: { "x-happi-key": API_KEY } }
+                : albumCover
+            }
+            style={{ height: "100%", width: "100%", borderRadius: moderateScale(8) }}
+            resizeMode={"cover"}
+          />
+        </View>
         <View>
           <Text
             style={{ fontWeight: "600", fontSize: moderateScale(18), marginTop: moderateScale(32) }}
@@ -93,9 +124,8 @@ const ExpoloreScreen = () => {
             style={{ display: "flex", width: "120%" }}
             contentContainerStyle={scrollViewStyle}
           >
-            {renderAlbumSquare(true)}
-            {renderAlbumSquare()}
-            {renderAlbumSquare()}
+            {albums &&
+              albums.map((album, key) => <View key={key}>{renderAlbumSquare(album, seedArtist)}</View>)}
           </ScrollView>
         </View>
       </Screen>

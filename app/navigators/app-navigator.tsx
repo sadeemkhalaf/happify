@@ -44,7 +44,7 @@ export type NavigatorParamList = {
   primaryStack: undefined
   player: { track?: Track ,trackId?: any, coverUri?: string }
   artist: { artistId?: any }
-  album: { album?: any, artistId?: any; albumId?: any }
+  album: { album?: any, id_artist?: any; albumId?: any }
 }
 
 // tabs navigation
@@ -101,10 +101,8 @@ const AppStack = () => {
       />
       <Stack.Screen
         options={{
-          presentation: "modal",
           animation: "slide_from_left",
           gestureEnabled: true,
-          statusBarAnimation: "slide",
           animationTypeForReplace: "push",
         }}
         name="player"
@@ -112,10 +110,8 @@ const AppStack = () => {
       />
       <Stack.Screen
         options={{
-          presentation: "modal",
           animation: "slide_from_left",
           gestureEnabled: true,
-          statusBarAnimation: "slide",
           animationTypeForReplace: "push",
         }}
         name="artist"
@@ -123,10 +119,8 @@ const AppStack = () => {
       />
       <Stack.Screen
         options={{
-          presentation: "modal",
           animation: "slide_from_left",
           gestureEnabled: true,
-          statusBarAnimation: "slide",
           animationTypeForReplace: "push",
         }}
         name="album"

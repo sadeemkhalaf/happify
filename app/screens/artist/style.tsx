@@ -57,27 +57,30 @@ export const renderTrackSquare = (track?, isFirst?: boolean) => {
   )
 }
 
-
-export const renderAlbumSquare = (album) => {
+export const renderAlbumSquare = (album, id_artist) => {
   const albumStyle: ViewStyle = {
-    height: moderateScale(windowWidth / 2 - 48),
-    width: moderateScale(windowWidth / 2 - 48),
+    height: scaleByDeviceWidth(windowWidth / 2 - 48),
+    width: scaleByDeviceWidth(windowWidth / 2 - 48),
     marginBottom: moderateScale(16),
-    backgroundColor: color.palette.white,
     borderRadius: moderateScale(13),
+    backgroundColor: color.palette.white,
   }
 
   return (
     <TouchableOpacity
-      onPress={() => navigate("album", {album: album})}
-      style={[
-        albumStyle,
-        { marginHorizontal: moderateScale(6) },
-        ShadowEffect,
-      ]}
+      onPress={() => navigate("album", { album: album, id_artist: id_artist })}
+      style={[albumStyle, { marginHorizontal: moderateScale(6) }, ShadowEffect]}
     >
-      <FastImage style={{ position: "absolute", height: scaleByDeviceWidth(200), width: '100%' }}
-          source={{ uri: album?.cover, headers: { "x-happi-key": API_KEY } }}/>
+      <FastImage
+        style={{
+          position: "absolute",
+          height: "100%",
+          width: "100%",
+          borderRadius: moderateScale(13),
+        }}
+        resizeMode={"cover"}
+        source={{ uri: album?.cover, headers: { "x-happi-key": API_KEY } }}
+      />
     </TouchableOpacity>
   )
 }
@@ -90,13 +93,5 @@ export const renderEmptyAlbumSquare = () => {
     borderRadius: moderateScale(13),
   }
 
-  return (
-    <View
-      style={[
-        albumStyle,
-        { marginHorizontal: moderateScale(6) },
-        ShadowEffect,
-      ]}
-    />
-  )
+  return <View style={[albumStyle, { marginHorizontal: moderateScale(6) }, ShadowEffect]} />
 }

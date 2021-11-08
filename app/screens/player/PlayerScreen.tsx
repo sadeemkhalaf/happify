@@ -9,11 +9,12 @@ import { useNavigation } from "@react-navigation/core"
 import FastImage from "react-native-fast-image"
 import { API_KEY, generateTrackUrl } from "../../services/api/api-config"
 import { AuthApiService } from "./../../services/api"
+import { IconButton } from "../../components/IconButton"
 
 const tracker: ViewStyle = {
   width: "100%",
-  borderRadius: 100,
-  marginTop: 32,
+  borderRadius: moderateScale(100),
+  marginTop: moderateScale(32),
 }
 
 const PlayerScreen = ({ route, navigation }) => {
@@ -31,13 +32,20 @@ const PlayerScreen = ({ route, navigation }) => {
     }
   }, [])
   const handleClose = () => {
-    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("album")
+    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("artist", { artistId: track.id_artist })
   }
 
   const handleNavToArtist = () => {
-    console.log(track.id_artist);
+    navigate.navigate("artist", { artistId: track.id_artist })
+  }
+
+  const handleNavToAlbum = () => {
+    console.log({ id_album: track?.id_album, album: track?.album, cover: track?.cover });
     
-    navigate.navigate("artist", {artistId: track.id_artist})
+    navigate.navigate("album", {
+      id_artist: track.id_artist,
+      album: { id_album: track?.id_album, album: track?.album, cover: track?.cover, id_artist: track.id_artist },
+    })
   }
 
   return (
@@ -81,34 +89,88 @@ const PlayerScreen = ({ route, navigation }) => {
               fontWeight: "bold",
               fontSize: moderateScale(18),
               marginBottom: moderateScale(8),
+              maxWidth: "75%",
             }}
             text={track.track}
             txOptions={{ defaultValue: "track undefined" }}
           />
-          <Text
+          <View
             style={{
-              fontWeight: "normal",
-              fontSize: moderateScale(16),
-              color: color.palette.grey.type3,
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
+              justifyContent: "space-between",
             }}
-            text={track.artist}
-            onPress={handleNavToArtist}
-          />
-        </View>
-
-        {/* {trackLyrics && ( */}
-          <View style={{ marginTop: moderateScale(16), marginBottom: moderateScale(32) }}>
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: moderateScale(32) }}>
+              {IconButton("album")}
+              <Text
+                style={{
+                  fontWeight: "normal",
+                  fontSize: moderateScale(14),
+                  marginRight: moderateScale(16),
+                  color: color.palette.grey.type3,
+                }}
+                text={"Album"}
+              />
+            </View>
             <Text
               style={{
                 fontWeight: "normal",
                 fontSize: moderateScale(18),
-                color: color.palette.white,
-                lineHeight: moderateScale(26),
+                color: color.palette.grey.type3,
+                maxWidth: "75%",
               }}
-              text={trackLyrics?.lyrics || "track has no lyrics!"}
-              txOptions={{ defaultValue: "track has no lyrics!" }}
+              text={track.album}
+              onPress={handleNavToAlbum}
             />
           </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {IconButton("artist")}
+              <Text
+                style={{
+                  fontWeight: "normal",
+                  fontSize: moderateScale(14),
+                  color: color.palette.grey.type3,
+                }}
+                text={"Artist"}
+                onPress={handleNavToArtist}
+              />
+            </View>
+            <Text
+              style={{
+                fontWeight: "normal",
+                fontSize: moderateScale(18),
+                color: color.palette.grey.type3,
+              }}
+              text={track.artist}
+              onPress={handleNavToArtist}
+            />
+          </View>
+        </View>
+
+        {/* {trackLyrics && ( */}
+        <View style={{ marginTop: moderateScale(16), marginBottom: moderateScale(32) }}>
+          <Text
+            style={{
+              fontWeight: "normal",
+              fontSize: moderateScale(18),
+              color: color.palette.white,
+              lineHeight: moderateScale(26),
+            }}
+            text={trackLyrics?.lyrics || "track has no lyrics!"}
+            txOptions={{ defaultValue: "track has no lyrics!" }}
+          />
+        </View>
         {/* )} */}
 
         {/* TODO: integration of sound player with another API */}

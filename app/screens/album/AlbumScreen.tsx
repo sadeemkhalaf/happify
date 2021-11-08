@@ -1,22 +1,19 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import {
   ScrollView,
-  TextStyle,
   View,
   ViewStyle,
-  Image,
-  ImageRequireSource,
   TouchableOpacity,
   Platform,
 } from "react-native"
+import FastImage from "react-native-fast-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dimensionUtils"
 import { useNavigation } from "@react-navigation/native"
 import { AuthApiService } from "../../services/api"
-
-const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
+import { API_KEY } from "../../services/api/api-config"
 
 const ShadowEffect: ViewStyle = {
   shadowColor: color.palette.grey.type1,
@@ -42,8 +39,18 @@ export const renderShadowBox = () => {
   )
 }
 
-const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
-  const { navigate } = useNavigation()
+const renderTrackListItem = (track?, artist?, withPlayButton = true) => {
+  const navigate = useNavigation()
+  const handleNavToPlayer = () => {
+    const trackWithArtist = {
+      ...track,
+      artist: artist.artist,
+      id_artist: artist.id_artist,
+      album: artist.album,
+      cover: artist?.cover,
+    }
+    navigate.navigate("player", { track: trackWithArtist, cover: artist?.cover })
+  }
 
   return (
     <TouchableOpacity
@@ -54,11 +61,11 @@ const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
         justifyContent: "space-between",
         alignItems: "center",
       }}
-      onPress={() => navigate("player")}
+      onPress={handleNavToPlayer}
     >
       <View style={{ width: "85%" }}>
         <Text
-          text={trackTitle || "Undefined"}
+          text={track?.track || "Undefined"}
           numberOfLines={1}
           style={{
             fontSize: scaleByDeviceWidth(14),
@@ -67,7 +74,7 @@ const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
           }}
         />
         <Text
-          text={artist || "Unknown artist"}
+          text={artist?.artist || "Unknown artist"}
           numberOfLines={1}
           style={{ fontSize: scaleByDeviceWidth(14), color: color.palette.offWhite }}
         />
@@ -78,18 +85,29 @@ const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
 
 const AlbumScreen = ({ route }) => {
   const navigate = useNavigation()
-  const { album } = route.params
+  const { album, id_artist } = route.params
+  const [albumTracks, setTracks] = useState([])
+  const [artist, setArtist] = useState(null)
 
+  const callAlbumTracks = useCallback(() => {
+    AuthApiService.getAllArtistAlbum(id_artist, album?.id_album).then((data) => {
+      setTracks(data.result.tracks)
+      setArtist(data.result)
+    })
+  }, [])
   useEffect(() => {
-    // AuthApiService.getAllArtistAlbum() 
+    callAlbumTracks()
   }, [])
 
   const handleClose = () => {
-    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("explore")
+    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("search")
   }
 
   return (
-    <LinearGradient colors={[color.palette.grey.type1, color.palette.grey.type1]} style={BG_GRADIENT}>
+    <LinearGradient
+      colors={[color.palette.grey.type1, color.palette.grey.type1]}
+      style={BG_GRADIENT}
+    >
       <View
         style={[
           {
@@ -103,11 +121,9 @@ const AlbumScreen = ({ route }) => {
         ]}
       >
         {renderShadowBox()}
-        <Image
-          style={{ position: "absolute" }}
-          source={albumCover}
-          height={scaleByDeviceWidth(200)}
-          width={windowWidth}
+        <FastImage
+          style={{ position: "absolute", height: scaleByDeviceWidth(200), width: "100%" }}
+          source={{ uri: album?.cover, headers: { "x-happi-key": API_KEY } }}
         />
       </View>
       <Screen
@@ -116,10 +132,14 @@ const AlbumScreen = ({ route }) => {
         style={{ paddingHorizontal: moderateScale(24), alignItems: "center" }}
       >
         <Header
-          style={{ zIndex: 1, marginTop: Platform.OS !== "ios" ? 0 : moderateScale(-32), width: windowWidth }}
+          style={{
+            zIndex: 1,
+            marginTop: Platform.OS !== "ios" ? 0 : moderateScale(-32),
+            width: windowWidth,
+          }}
           isPlayer
-          headerText={"The-Astronaut"}
-          subheader={"Released 2020"}
+          headerText={artist?.artist || "The-Astronaut"}
+          subheader={artist?.label || ""}
           leftIcon={"close"}
           onLeftPress={handleClose}
         />
@@ -131,9 +151,10 @@ const AlbumScreen = ({ route }) => {
           }}
         >
           <Text
-            text={"THE-Album"}
+            text={album?.album || "THE-Album"}
             numberOfLines={3}
             style={{
+              textAlign: "center",
               color: color.palette.white,
               fontWeight: "bold",
               fontSize: scaleByDeviceWidth(32),
@@ -148,11 +169,10 @@ const AlbumScreen = ({ route }) => {
             justifyContent: "flex-start",
           }}
         >
-          {renderTrackListItem("Was it a dream", "Thirty Seconds to Mars")}
-          {renderTrackListItem("Departer", "Katatonia")}
-          {renderTrackListItem("Below", "Leprous")}
-          {renderTrackListItem()}
-          {renderTrackListItem()}
+          {albumTracks &&
+            albumTracks.map((track, key) => (
+              <View key={key}>{renderTrackListItem(track, artist)}</View>
+            ))}
         </ScrollView>
       </Screen>
     </LinearGradient>
