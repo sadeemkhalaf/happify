@@ -1,44 +1,72 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { ScrollView, TextInput, View, ViewStyle } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
-import { TextInput, View, ViewStyle } from "react-native"
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
+import { useDebounce } from "../../hooks/useDebounce"
+import { AuthApiService } from "../../services/api"
+import { renderTrackListItemSearchResults } from "./style"
+
+const renderFilterChip = (title?: string, state = false) => {
+  const [selected, setSelected] = useState(state)
+  const SELECTED: ViewStyle = {
+    backgroundColor: color.palette.purple.type1,
+    borderColor: color.palette.purple.type1,
+  }
+  const UNSELECTED: ViewStyle = {}
+
+  return (
+    <View
+      style={[
+        {
+          paddingVertical: moderateScale(8),
+          paddingHorizontal: moderateScale(16),
+          borderWidth: moderateScale(1),
+          display: "flex",
+          marginRight: moderateScale(8),
+          marginTop: moderateScale(16),
+          borderRadius: moderateScale(20),
+          borderColor: color.palette.grey.type4,
+        },
+        selected ? SELECTED : UNSELECTED,
+      ]}
+    >
+      <Text onPress={() => setSelected(!selected)}>{title}</Text>
+    </View>
+  )
+}
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("")
+  const [results, setResults] = useState([])
+  const [isSearching, setIsSearching] = useState(false)
+  const debouncedSearchTerm = useDebounce(searchText, 500)
 
-  const renderFilterChip = (title?: string) => {
-    const [selected, setSelected] = useState(false)
-    const SELECTED: ViewStyle = {
-      backgroundColor: "#B87BF2",
-      borderColor: "#B87BF2",
-    }
-    const UNSELECTED: ViewStyle = {}
-
-    return (
-      <View
-        style={[
-          {
-            paddingVertical: moderateScale(8),
-            paddingHorizontal: moderateScale(16),
-            borderWidth: moderateScale(1),
-            display: "flex",
-            marginRight: moderateScale(8),
-            marginTop: moderateScale(16),
-            borderRadius: moderateScale(20),
-            borderColor: "#707070",
-          },
-          selected ? SELECTED : UNSELECTED,
-        ]}
-      >
-        <Text onPress={() => setSelected(!selected)}>{title}</Text>
-      </View>
-    )
-  }
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        setIsSearching(true)
+        if (searchText.length > 2) {
+          // run search service
+          AuthApiService.getSearchResults(searchText).then((data) => {
+            setIsSearching(false)
+            setResults(data?.result)
+          })
+        }
+      } else {
+        setResults([])
+        setIsSearching(false)
+      }
+    },
+    [debouncedSearchTerm], // Only call effect if debounced search term changes
+  )
 
   return (
-    <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
+    <LinearGradient
+      colors={[color.palette.grey.type1, color.palette.grey.type2]}
+      style={BG_GRADIENT}
+    >
       <Screen
         unsafe
         preset={"fixed"}
@@ -61,24 +89,20 @@ const SearchScreen = () => {
               borderRadius: scaleByDeviceWidth(13),
               paddingHorizontal: scaleByDeviceWidth(24),
               backgroundColor: color.palette.white,
-              width: "90%",
+              width: "100%",
             }}
             placeholder={"Search Keyword"}
             value={searchText}
             onChangeText={setSearchText}
             clearButtonMode={"while-editing"}
             autoFocus
-            placeholderTextColor={"#938BAC"}
+            placeholderTextColor={color.palette.purple.type2}
             multiline={false}
             maxLength={50}
           />
-          <Text
-            style={{ fontWeight: "600", marginLeft: scaleByDeviceWidth(16), color: "#B87BF2" }}
-            onPress={() => {}}
-          >
-            {"Go!"}
-          </Text>
         </View>
+
+        {/* search filters */}
         <View
           style={{
             display: "flex",
@@ -88,33 +112,59 @@ const SearchScreen = () => {
           }}
         >
           {renderFilterChip("Artist")}
-          {renderFilterChip("Track")}
+          {renderFilterChip("Track", true)}
         </View>
-        <View style={{ flex: 0.6, justifyContent: "center" }}>
+
+        {/* results */}
+
+        {isSearching && (
           <Text
+            text={"searching ..."}
             style={{
-              fontWeight: "900",
-              color: color.palette.white,
-              textAlign: "center",
-              fontSize: scaleByDeviceWidth(16),
-              marginBottom: scaleByDeviceWidth(8),
+              paddingVertical: moderateScale(16),
+              color: color.palette.purpleActive.typeActive,
             }}
-            onPress={() => {}}
-          >
-            {"Play what you like"}
-          </Text>
-          <Text
-            style={{
-              fontWeight: "400",
-              fontSize: scaleByDeviceWidth(12),
-              color: color.palette.offWhite,
-              textAlign: "center",
+          />
+        )}
+        {results.length < 1 ? (
+          <View style={{ flex: 0.6, justifyContent: "center" }}>
+            <Text
+              style={{
+                fontWeight: "900",
+                color: color.palette.white,
+                textAlign: "center",
+                fontSize: scaleByDeviceWidth(16),
+                marginBottom: scaleByDeviceWidth(8),
+              }}
+              onPress={() => {}}
+            >
+              {"Play what you like"}
+            </Text>
+            <Text
+              style={{
+                fontWeight: "400",
+                fontSize: scaleByDeviceWidth(12),
+                color: color.palette.offWhite,
+                textAlign: "center",
+              }}
+              onPress={() => {}}
+            >
+              {"Search for atists, songs and more"}
+            </Text>
+          </View>
+        ) : (
+          <ScrollView
+            style={{ display: "flex", width: "100%", height: "100%" }}
+            contentContainerStyle={{
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            onPress={() => {}}
           >
-            {"Search for atists, songs and more"}
-          </Text>
-        </View>
+            {results.map((track, key) => (
+              <View key={key}>{renderTrackListItemSearchResults(track)}</View>
+            ))}
+          </ScrollView>
+        )}
       </Screen>
     </LinearGradient>
   )

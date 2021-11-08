@@ -19,6 +19,8 @@ import {
 } from "../screens"
 import { getTabBarIcon, navigationRef } from "./navigation-utilities"
 import { moderateScale, scaleByDeviceWidth } from "../theme/dimensionUtils"
+import { Track } from "../services/api"
+import { color } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,9 +42,9 @@ export type TabsNavigatorParamList = {
 
 export type NavigatorParamList = {
   primaryStack: undefined
-  player: { trackId?: any }
+  player: { track?: Track ,trackId?: any, coverUri?: string }
   artist: { artistId?: any }
-  album: { artistId?: any; albumId?: any }
+  album: { album?: any, id_artist?: any; albumId?: any }
 }
 
 // tabs navigation
@@ -54,14 +56,14 @@ const TabsNav = () => (
       tabBarStyle: {
         height: scaleByDeviceWidth(75),
         paddingBottom: scaleByDeviceWidth(8),
-        backgroundColor: "#46454B",
+        backgroundColor: color.palette.grey.type5,
       },
       tabBarLabelStyle: { fontSize: moderateScale(15) },
       tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name),
       headerShown: false,
       headerShadowVisible: false,
-      tabBarInactiveTintColor: "#A3A2A5",
-      tabBarActiveTintColor: "#dc8eeb",
+      tabBarInactiveTintColor: color.palette.purpleActive.typeInactive,
+      tabBarActiveTintColor: color.palette.purpleActive.typeActive,
       tabBarHideOnKeyboard: true,
     })}
     initialRouteName={"explore"}
@@ -77,7 +79,7 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
+    <Stack.Navigator  
       screenOptions={{
         gestureEnabled: true,
         orientation: "portrait",
@@ -99,10 +101,8 @@ const AppStack = () => {
       />
       <Stack.Screen
         options={{
-          presentation: "modal",
           animation: "slide_from_left",
           gestureEnabled: true,
-          statusBarAnimation: "slide",
           animationTypeForReplace: "push",
         }}
         name="player"
@@ -110,10 +110,8 @@ const AppStack = () => {
       />
       <Stack.Screen
         options={{
-          presentation: "modal",
           animation: "slide_from_left",
           gestureEnabled: true,
-          statusBarAnimation: "slide",
           animationTypeForReplace: "push",
         }}
         name="artist"
@@ -121,10 +119,8 @@ const AppStack = () => {
       />
       <Stack.Screen
         options={{
-          presentation: "modal",
           animation: "slide_from_left",
           gestureEnabled: true,
-          statusBarAnimation: "slide",
           animationTypeForReplace: "push",
         }}
         name="album"

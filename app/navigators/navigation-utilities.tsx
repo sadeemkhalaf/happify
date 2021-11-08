@@ -7,7 +7,7 @@ import {
   NavigationAction,
   createNavigationContainerRef,
 } from "@react-navigation/native"
-import { Explore, Profile, Search } from "../../assets/images/svgs"
+import * as SvgIcons from "../../assets/images/svgs"
 
 /* eslint-disable */
 export const RootNavigation = {
@@ -85,17 +85,17 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
 
 
 export const getTabBarIcon = (routeName: string): JSX.Element => {
-  let Icon = Explore
+  let Icon = SvgIcons.Explore
 
   switch (routeName) {
     case "explore":
-      Icon = Explore
+      Icon = SvgIcons.Explore
       break
     case "profile":
-      Icon = Profile
+      Icon = SvgIcons.Profile
       break
     case "search":
-      Icon = Search
+      Icon = SvgIcons.Search
       break
   }
   return <Icon height={24} width={24}/>
@@ -120,7 +120,7 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
 
     if (previousRouteName !== currentRouteName) {
       // track screens.
-      __DEV__ && console.tron.log(currentRouteName)
+      // __DEV__ && console.tron.log(currentRouteName)
     }
 
     // Save the current route name for later comparision

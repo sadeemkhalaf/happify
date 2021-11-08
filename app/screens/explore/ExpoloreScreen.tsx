@@ -1,26 +1,43 @@
-import React, { useEffect } from "react"
+/* eslint-disable react-native/no-inline-styles */
+import React, { useEffect, useState } from "react"
+import { ActivityIndicator, ImageRequireSource, ScrollView, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
-import { TouchableOpacity, View, ViewStyle } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
+import FastImage from "react-native-fast-image"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { Api } from "../../services/api/api"
 import { color } from "../../theme"
 import { moderateScale } from "../../theme/dimensionUtils"
+import { AuthApiService } from "../../services/api"
+import { renderTrackSquare, renderAlbumSquare } from "./style"
+import { API_KEY } from "../../services/api/api-config"
+import arrayShuffle from "array-shuffle"
 
-const ShadowEffect: ViewStyle = {
+const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
+
+export const ShadowEffect: ViewStyle = {
   shadowColor: "#2f2730",
   shadowOffset: {
-    width: 10,
-    height: 10,
+    width: moderateScale(10),
+    height: moderateScale(10),
   },
   shadowOpacity: 0.27,
   shadowRadius: 4.65,
-
   elevation: 6,
 }
 
+const scrollViewStyle: ViewStyle = {
+  paddingRight: moderateScale(65),
+  paddingVertical: moderateScale(16),
+  alignItems: "center",
+  justifyContent: "center",
+}
+
 const ExpoloreScreen = () => {
+
+  const [tracks, setTracks] = useState<any[]>([])
+  const [albums, setAlbums] = useState<any[]>([])
+
   const { navigate } = useNavigation()
   const apiService = new Api()
 
@@ -28,94 +45,98 @@ const ExpoloreScreen = () => {
     apiService.getArtists().then((res) => console.log(res))
   }, [])
 
-  const renderAlbumSquare = (isFirst?: boolean) => (
-    <TouchableOpacity
-      onPress={() => navigate("album")}
-      style={[
-        {
-          height: 167,
-          width: 167,
-          backgroundColor: color.palette.white,
-          borderRadius: 13,
-        },
-        isFirst ? { marginRight: 6 } : { marginHorizontal: 6 },
-        ShadowEffect,
-      ]}
-    />
-  )
-  const renderTrackSquare = (isFirst?: boolean) => (
-    <View style={{ justifyContent: "center", alignItems: "flex-start" }}>
-      <TouchableOpacity
-        onPress={() => navigate("player")}
-        style={[
-          {
-            height: 110,
-            width: 110,
-            backgroundColor: color.palette.white,
-            borderRadius: 8,
-            marginBottom: 4,
-          },
-          isFirst ? { marginRight: 5 } : { marginHorizontal: 5 },
-          ShadowEffect,
-        ]}
-      />
-      <Text
-        style={{ width: 110, fontWeight: "500", fontSize: 12, marginBottom: 4 }}
-        numberOfLines={1}
-      >
-        {"Long Track title Track "}
-      </Text>
-      <Text style={{ width: 110, fontWeight: "300", fontSize: 12 }} numberOfLines={1}>
-        {"Artist name"}
-      </Text>
-    </View>
-  )
+  //artist: 192169
+
+  const seedArtist = 36481
+
+  useEffect(() => {
+    AuthApiService.getSmartPlaylist(seedArtist)
+      .then((data) => {
+        data?.success ? setTracks(data?.result) : setTracks([])
+      })
+      .catch((error) => {
+        console.log(error)
+        setTracks([])
+      })
+
+    AuthApiService.getAllArtistAlbums(seedArtist)
+      .then((data) => {
+        const albumsList = arrayShuffle(data?.result.albums)
+
+        data?.success ? setAlbums(albumsList) : setAlbums([])
+      })
+      .catch((error) => {
+        setAlbums([])
+        setTracks([])
+      })
+  }, [])
 
   return (
-    <LinearGradient colors={["#413D4D", "#353438"]} style={BG_GRADIENT}>
-      <Screen preset={"scroll"} backgroundColor={"transparent"} style={{ paddingHorizontal: 24 }}>
+    <LinearGradient
+      colors={[color.palette.grey.type1, color.palette.grey.type2]}
+      style={BG_GRADIENT}
+    >
+      <ActivityIndicator size="small" color={color.palette.purple.type4} />
+      <Screen
+        unsafe
+        preset={"scroll"}
+        backgroundColor={"transparent"}
+        style={{ paddingHorizontal: moderateScale(24) }}
+      >
         <Header headerText={"Explore"} titleStyle={{ left: moderateScale(-32) }} />
         <View
           style={{
-            height: 110,
+            height: moderateScale(110),
             width: "100%",
             backgroundColor: color.palette.white,
-            borderRadius: 8,
+            borderRadius: moderateScale(8),
           }}
-        ></View>
+        >
+          <FastImage
+            source={
+              albums.length > 0
+                ? { uri: albums[0]?.cover, headers: { "x-happi-key": API_KEY } }
+                : albumCover
+            }
+            style={{ height: "100%", width: "100%", borderRadius: moderateScale(8) }}
+            resizeMode={"cover"}
+          />
+        </View>
         <View>
-          <Text style={{ fontWeight: "600", fontSize: 18, marginTop: 32 }}>{"Made for you"}</Text>
+          <Text
+            style={{ fontWeight: "600", fontSize: moderateScale(18), marginTop: moderateScale(32) }}
+          >
+            {"Made for you"}
+          </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{ display: "flex", width: "120%" }}
             contentContainerStyle={{
-              paddingRight: 65,
-              paddingVertical: 16,
+              paddingRight: moderateScale(65),
+              paddingVertical: moderateScale(16),
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {renderTrackSquare()}
-            {renderTrackSquare()}
-            {renderTrackSquare()}
-            {renderTrackSquare()}
+            {tracks &&
+              tracks.map((track, key) => <View key={key}>{renderTrackSquare(track)}</View>)}
           </ScrollView>
-          <Text style={{ fontWeight: "600", fontSize: 18, marginTop: 8 }}>{"Newly Added"}</Text>
+          <Text
+            style={{ fontWeight: "600", fontSize: moderateScale(18), marginTop: moderateScale(8) }}
+          >
+            {"Newly Added"}
+          </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{ display: "flex", width: "120%" }}
-            contentContainerStyle={{
-              paddingRight: 65,
-              paddingVertical: 16,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            contentContainerStyle={scrollViewStyle}
           >
-            {renderAlbumSquare(true)}
-            {renderAlbumSquare()}
-            {renderAlbumSquare()}
+            {albums &&
+              albums.map((album, key) => (
+                <View key={key}>{renderAlbumSquare(album, seedArtist)}</View>
+              ))}
           </ScrollView>
         </View>
       </Screen>

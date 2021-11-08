@@ -1,7 +1,15 @@
 import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
-import { ApiConfig, artist_url, DEFAULT_API_CONFIG } from "./api-config"
-import * as Types from "./api.types"
+import {
+  album_url,
+  ApiConfig,
+  API_KEY,
+  artist_url,
+  DEFAULT_API_CONFIG,
+  smart_playlist,
+} from "./api-config"
+import { ApiResponseType } from "./api.types"
+import { Alert } from "react-native"
 
 /**
  * Manages all requests to the API.
@@ -24,6 +32,7 @@ export class Api {
    */
   constructor(config: ApiConfig = DEFAULT_API_CONFIG) {
     this.config = config
+    this.setup()
   }
 
   /**
@@ -40,65 +49,106 @@ export class Api {
       timeout: this.config.timeout,
       headers: {
         Accept: "application/json",
-        "x-happi-key": "8742c6U7Yzl8udLqg17aGJUwmAZos5Bj9SY9pPMd25jGsMnaWKQkA1IY",
-        "apikey": "8742c6U7Yzl8udLqg17aGJUwmAZos5Bj9SY9pPMd25jGsMnaWKQkA1IY",
+        "x-happi-key": API_KEY,
       },
     })
   }
 
-  /**
-   * Gets a list of users.
-   */
-  async getUsers(): Promise<Types.GetUsersResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
+  handleAPIError(error) {
+    let errorType = error
+    if (!error.kind) {
+      errorType = { kind: "bad-data", message: "Bad Data" }
     }
-
-    const convertUser = (raw) => {
-      return {
-        id: raw.id,
-        name: raw.name,
-      }
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      const rawUsers = response.data
-      const resultUsers: Types.User[] = rawUsers.map(convertUser)
-      return { kind: "ok", users: resultUsers }
-    } catch {
-      return { kind: "bad-data" }
-    }
+    Alert.alert("Error", errorType.message)
+    throw errorType
   }
 
   /**
-   * Gets a single user by ID
+   * Creates a GET request
+   *
+   * @param endpoint The endpoint of the API
+   * @param params The params for the request
    */
+  public async getRequest(endpoint: string, params?: any): ApiResponseType {
+    try {
+      const response: ApiResponse<any> = await this.apisauce.get(endpoint, { ...params })
 
-  async getUser(id: string): Promise<Types.GetUserResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
+      if (!response.ok) {
+        const problem = getGeneralApiProblem(response)
+        if (problem) throw problem
+      } else {
+        return response?.data
+      }
+    } catch (err) {
+      this.handleAPIError(err)
+    }
+  }
 
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
+  // get smart playlist
+  public async getSmartPlaylist(artist_id = 19155) {
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${smart_playlist}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
+  }
+
+  // get tracks
+  public async getAllTracks(artist_id: number = 19155, album_id: number) {
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
+  }
+
+  // get albums
+  public async getAllArtistAlbums(artist_id: number = 19155) {
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${album_url}/`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
+  }
+
+  // get albums
+  public async getAllArtistAlbum(artist_id: number = 19155, album_id: number) {
+    try {
+      return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
+  }
+
+    // get album Tracks
+    public async getAllArtistAlbumTracks(artist_id: number = 19155, album_id: number) {
+      try {
+        // artists/:id_artist/albums/:id_album/tracks
+
+        return this.getRequest(`${artist_url}/${artist_id}${album_url}/${album_id}/tracks`)
+      } catch (err) {
+        this.handleAPIError(err)
+      }
     }
 
-    // transform the data into the format we are expecting
+  // get aartist
+  public async getArtist(artist_id: number = 19155) {
     try {
-      const resultUser: Types.User = {
-        id: response.data.id,
-        name: response.data.name,
-      }
-      return { kind: "ok", user: resultUser }
-    } catch {
-      return { kind: "bad-data" }
+      return this.getRequest(`${artist_url}/${artist_id}`)
+    } catch (err) {
+      this.handleAPIError(err)
+    }
+  }
+
+  // get search results
+  public async getSearchResults(searchQuery: string, type: string[] = ["track"]) {
+    try {
+      const stringifyType = type.join(",")
+      return this.getRequest(``, { q: searchQuery, lyrics: 1, limit: 50, type: stringifyType })
+    } catch (err) {
+      this.handleAPIError(err)
     }
   }
 }
+
+export const AuthApiService = new Api()
