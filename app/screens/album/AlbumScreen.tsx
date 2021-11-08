@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   ScrollView,
   TextStyle,
@@ -14,6 +14,7 @@ import { BG_GRADIENT, Screen, Header, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dimensionUtils"
 import { useNavigation } from "@react-navigation/native"
+import { AuthApiService } from "../../services/api"
 
 const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
 
@@ -71,16 +72,19 @@ const renderTrackListItem = (trackTitle?, artist?, withPlayButton = true) => {
           style={{ fontSize: scaleByDeviceWidth(14), color: color.palette.offWhite }}
         />
       </View>
-      {withPlayButton && <PlayWhite width={14} height={14} />}
     </TouchableOpacity>
   )
 }
 
-const AlbumScreen = () => {
+const AlbumScreen = ({ route }) => {
   const navigate = useNavigation()
-  const handleClose = () => {
-    console.log("close")
+  const { album } = route.params
 
+  useEffect(() => {
+    // AuthApiService.getAllArtistAlbum() 
+  }, [])
+
+  const handleClose = () => {
     navigate.canGoBack() ? navigate.goBack() : navigate.navigate("explore")
   }
 

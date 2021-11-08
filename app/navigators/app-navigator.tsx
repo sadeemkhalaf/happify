@@ -44,7 +44,7 @@ export type NavigatorParamList = {
   primaryStack: undefined
   player: { track?: Track ,trackId?: any, coverUri?: string }
   artist: { artistId?: any }
-  album: { artistId?: any; albumId?: any }
+  album: { album?: any, artistId?: any; albumId?: any }
 }
 
 // tabs navigation

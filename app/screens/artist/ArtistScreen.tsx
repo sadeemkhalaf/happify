@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { View } from "react-native"
+import { ScrollView, View, ViewStyle } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import FastImage from "react-native-fast-image"
 import { renderShadowBox } from ".."
@@ -8,9 +8,17 @@ import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
 import { API_KEY } from "../../services/api/api-config"
 import { AuthApiService } from "../../services/api"
-import { renderAlbumSquare } from "../explore/style"
+import { renderAlbumSquare, renderEmptyAlbumSquare } from "./style"
 
-  
+
+const ScrollContainer: ViewStyle = {
+  display: "flex",
+  width: "100%",
+  flexWrap: 'wrap',
+  flexDirection: 'row',
+  justifyContent: 'center'
+}
+
 const ArtistScreen = ({ route }) => {
   const { artistId } = route.params
   const [albums, setAlbums] = useState([])
@@ -19,14 +27,14 @@ const ArtistScreen = ({ route }) => {
   useEffect(() => {
     AuthApiService.getAllArtistAlbums(artistId)
       .then((data) => {
-        setAlbums(data?.result)
+        setAlbums(data?.result.albums)
       })
       .catch(() => setAlbums([]))
 
     AuthApiService.getArtist(artistId)
       .then((data) => {
-          console.log(data?.result);
-          
+        console.log(data?.result);
+
         setArtist(data?.result)
       })
       .catch(() => setArtist(null))
@@ -40,18 +48,7 @@ const ArtistScreen = ({ route }) => {
       colors={[color.palette.grey.type1, color.palette.grey.type1]}
       style={BG_GRADIENT}
     >
-      <View
-        style={[
-          {
-            position: "absolute",
-            top: 0,
-            width: "100%",
-            height: moderateScale(200),
-            backgroundColor: color.palette.deepPurple,
-            zIndex: -1,
-          },
-        ]}
-      >
+      <View>
         {renderShadowBox()}
         <FastImage
           style={{ position: "absolute", height: scaleByDeviceWidth(200), width: '100%' }}
@@ -81,14 +78,12 @@ const ArtistScreen = ({ route }) => {
             }}
           />
         </View>
-        <View
-            style={[{ display: "flex", width: "100%", flexWrap: 'wrap', flexDirection: 'row' }]}
-          >
-            {renderAlbumSquare(true)}
-            {renderAlbumSquare()}
-            {renderAlbumSquare()}
-            {renderAlbumSquare()}
-          </View>
+        <ScrollView
+          contentContainerStyle={[ScrollContainer]}
+        >
+          {albums.map((album, key) => <View key={key}>{renderAlbumSquare(album)}</View>)}
+          {albums.length % 2 !== 0 && renderEmptyAlbumSquare()}
+        </ScrollView>
       </Screen>
     </LinearGradient>
   )
