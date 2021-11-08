@@ -20,7 +20,6 @@ export const generateTrackUrl = (artistId: number, albumId: number) => {
   //  /artists/:id_artist/albums/:id_album/tracks/:id_track
   return `${artist_url}/${artistId}${album_url}/${albumId}`
 }
-}
 
 
 /*
