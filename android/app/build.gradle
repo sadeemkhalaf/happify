@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 // Unimodules: https://docs.expo.io/bare/installing-unimodules/#configuration-for-android
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -191,7 +192,9 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    
 
     addUnimodulesDependencies()
 
