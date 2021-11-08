@@ -49,12 +49,14 @@ export function Header(props: HeaderProps) {
 
   const leftIconStyle: ViewStyle = {
     marginLeft: moderateScale(24),
-    backgroundColor: color.palette.purple.type1,
+    backgroundColor: `${color.palette.purple.type1}64`,
     borderRadius: moderateScale(30),
   }
 
   const rightIconStyle: ViewStyle = {
-    paddingRight: moderateScale(24),
+    marginRight: moderateScale(24),
+    backgroundColor: `${color.palette.deepPurple}64`,
+    borderRadius: moderateScale(30),
   }
 
   return (
@@ -72,7 +74,7 @@ export function Header(props: HeaderProps) {
       </View>
       {rightIcon ? (
         <Button preset="link" onPress={onRightPress}>
-          {IconButton(leftIcon, onRightPress, rightIconStyle)}
+          {IconButton(rightIcon, onRightPress, rightIconStyle)}
         </Button>
       ) : (
         <View style={RIGHT} />

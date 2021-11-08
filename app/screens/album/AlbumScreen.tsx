@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react"
-import {
-  ScrollView,
-  View,
-  ViewStyle,
-  TouchableOpacity,
-  Platform,
-} from "react-native"
+import { ScrollView, View, ViewStyle, TouchableOpacity, Platform } from "react-native"
 import FastImage from "react-native-fast-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { BG_GRADIENT, Screen, Header, Text } from "../../components"
@@ -14,36 +8,15 @@ import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dime
 import { useNavigation } from "@react-navigation/native"
 import { AuthApiService } from "../../services/api"
 import { API_KEY } from "../../services/api/api-config"
+import { renderShadowBox } from "./style"
 
-const ShadowEffect: ViewStyle = {
-  shadowColor: color.palette.grey.type1,
-  shadowOffset: {
-    width: moderateScale(-30),
-    height: moderateScale(-65),
-  },
-  shadowOpacity: 1,
-  shadowRadius: moderateScale(22),
-  elevation: moderateScale(30),
-  width: "150%",
-  height: moderateScale(120),
-  backgroundColor: color.palette.grey.type1,
-}
-
-const absoluteBox: ViewStyle = { position: "relative", top: moderateScale(230), zIndex: 3 }
-
-export const renderShadowBox = () => {
-  return (
-    <View style={absoluteBox}>
-      <View style={[ShadowEffect]} />
-    </View>
-  )
-}
-
-const renderTrackListItem = (track?, artist?, withPlayButton = true) => {
+const renderTrackListItem = (track?, artist?, id_album?, withPlayButton = true) => {
   const navigate = useNavigation()
+
   const handleNavToPlayer = () => {
     const trackWithArtist = {
       ...track,
+      id_album: id_album,
       artist: artist.artist,
       id_artist: artist.id_artist,
       album: artist.album,
@@ -90,7 +63,7 @@ const AlbumScreen = ({ route }) => {
   const [artist, setArtist] = useState(null)
 
   const callAlbumTracks = useCallback(() => {
-    AuthApiService.getAllArtistAlbum(id_artist, album?.id_album).then((data) => {
+    AuthApiService.getAllArtistAlbumTracks(id_artist, album?.id_album).then((data) => {
       setTracks(data.result.tracks)
       setArtist(data.result)
     })
@@ -101,6 +74,10 @@ const AlbumScreen = ({ route }) => {
 
   const handleClose = () => {
     navigate.canGoBack() ? navigate.goBack() : navigate.navigate("search")
+  }
+
+  const handleNavToSearch = () => {
+    navigate.navigate("search")
   }
 
   return (
@@ -140,8 +117,10 @@ const AlbumScreen = ({ route }) => {
           isPlayer
           headerText={artist?.artist || "The-Astronaut"}
           subheader={artist?.label || ""}
-          leftIcon={"close"}
+          leftIcon={"back"}
           onLeftPress={handleClose}
+          rightIcon={'search'}
+          onRightPress={handleNavToSearch}
         />
         <View
           style={{
@@ -171,7 +150,7 @@ const AlbumScreen = ({ route }) => {
         >
           {albumTracks &&
             albumTracks.map((track, key) => (
-              <View key={key}>{renderTrackListItem(track, artist)}</View>
+              <View key={key}>{renderTrackListItem(track, artist, album?.id_album)}</View>
             ))}
         </ScrollView>
       </Screen>

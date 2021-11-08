@@ -21,9 +21,10 @@ const PlayerScreen = ({ route, navigation }) => {
   const [trackLyrics, setLyrics] = useState()
   const navigate = useNavigation()
   const { track, cover } = route.params
-
+  
   useEffect(() => {
     const path = generateTrackUrl(track.id_artist, track.id_album)
+
     {
       track.haslyrics &&
         AuthApiService.getRequest(`${path}/tracks/${track.id_track}/lyrics`).then((data) => {
@@ -32,19 +33,28 @@ const PlayerScreen = ({ route, navigation }) => {
     }
   }, [])
   const handleClose = () => {
-    navigate.canGoBack() ? navigate.goBack() : navigate.navigate("artist", { artistId: track.id_artist })
+    navigate.canGoBack()
+      ? navigate.goBack()
+      : navigate.navigate("artist", { artistId: track.id_artist })
   }
 
   const handleNavToArtist = () => {
     navigate.navigate("artist", { artistId: track.id_artist })
   }
 
+  const handleNavToSearch = () => {
+    navigate.navigate("search")
+  }
+
   const handleNavToAlbum = () => {
-    console.log({ id_album: track?.id_album, album: track?.album, cover: track?.cover });
-    
     navigate.navigate("album", {
       id_artist: track.id_artist,
-      album: { id_album: track?.id_album, album: track?.album, cover: track?.cover, id_artist: track.id_artist },
+      album: {
+        id_album: track?.id_album,
+        album: track?.album,
+        cover: track?.cover,
+        id_artist: track.id_artist,
+      },
     })
   }
 
@@ -59,6 +69,8 @@ const PlayerScreen = ({ route, navigation }) => {
         subheader={track.album || "Undefined Album"}
         leftIcon={"close"}
         onLeftPress={handleClose}
+        rightIcon={'search'}
+        onRightPress={handleNavToSearch}
       />
       <Screen
         unsafe
@@ -102,7 +114,13 @@ const PlayerScreen = ({ route, navigation }) => {
               justifyContent: "space-between",
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: moderateScale(32) }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: moderateScale(32),
+              }}
+            >
               {IconButton("album")}
               <Text
                 style={{

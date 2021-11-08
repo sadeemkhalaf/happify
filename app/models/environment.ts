@@ -1,10 +1,10 @@
 import { Api } from "../services/api"
 
-let ReactotronDev
-if (__DEV__) {
-  const { Reactotron } = require("../services/reactotron")
-  ReactotronDev = Reactotron
-}
+// let ReactotronDev
+// if (__DEV__) {
+//   const { Reactotron } = require("../services/reactotron")
+//   ReactotronDev = Reactotron
+// }
 
 /**
  * The environment is a place where services and shared dependencies between
@@ -15,7 +15,7 @@ export class Environment {
     // create each service
     if (__DEV__) {
       // dev-only services
-      this.reactotron = new ReactotronDev()
+      // this.reactotron = new ReactotronDev()
     }
     this.api = new Api()
   }
@@ -23,7 +23,7 @@ export class Environment {
   async setup() {
     // allow each service to setup
     if (__DEV__) {
-      await this.reactotron.setup()
+      // await this.reactotron.setup()
     }
     await this.api.setup()
   }
@@ -31,7 +31,7 @@ export class Environment {
   /**
    * Reactotron is only available in dev.
    */
-  reactotron: typeof ReactotronDev
+  // reactotron: typeof ReactotronDev
 
   /**
    * Our api.

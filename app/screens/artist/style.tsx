@@ -1,12 +1,13 @@
 import React from "react"
 import { View, TouchableOpacity, ViewStyle } from "react-native"
-import { ShadowEffect } from ".."
+import { ShadowEffect } from "./../album/style"
 import { navigate } from "../../navigators"
 import { API_KEY } from "../../services/api/api-config"
 import { color } from "../../theme"
 import { Text } from "../../components"
 import { moderateScale, scaleByDeviceWidth, windowWidth } from "../../theme/dimensionUtils"
 import FastImage from "react-native-fast-image"
+import { absoluteBox } from "../album/style"
 
 export const renderTrackSquare = (track?, isFirst?: boolean) => {
   return (
@@ -69,7 +70,7 @@ export const renderAlbumSquare = (album, id_artist) => {
   return (
     <TouchableOpacity
       onPress={() => navigate("album", { album: album, id_artist: id_artist })}
-      style={[albumStyle, { marginHorizontal: moderateScale(6) }, ShadowEffect]}
+      style={[albumStyle, { marginHorizontal: moderateScale(6) }]}
     >
       <FastImage
         style={{
@@ -94,4 +95,15 @@ export const renderEmptyAlbumSquare = () => {
   }
 
   return <View style={[albumStyle, { marginHorizontal: moderateScale(6) }, ShadowEffect]} />
+}
+
+
+// export const absoluteBox: ViewStyle = { position: "relative", top: moderateScale(230), zIndex: 3 }
+
+export const renderShadowBox = () => {
+  return (
+    <View style={absoluteBox}>
+      <View style={[ShadowEffect]} />
+    </View>
+  )
 }

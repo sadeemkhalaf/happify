@@ -33,13 +33,12 @@ const scrollViewStyle: ViewStyle = {
 }
 
 const ExpoloreScreen = () => {
-  const { navigate } = useNavigation()
   const [tracks, setTracks] = useState<any[]>([])
   const [albums, setAlbums] = useState<any[]>([])
 
   //artist: 192169
 
-  const seedArtist = 36481;
+  const seedArtist = 36481
 
   useEffect(() => {
     AuthApiService.getSmartPlaylist(seedArtist)
@@ -70,6 +69,7 @@ const ExpoloreScreen = () => {
     >
       <ActivityIndicator size="small" color={color.palette.purple.type4} />
       <Screen
+        unsafe
         preset={"scroll"}
         backgroundColor={"transparent"}
         style={{ paddingHorizontal: moderateScale(24) }}
@@ -125,7 +125,9 @@ const ExpoloreScreen = () => {
             contentContainerStyle={scrollViewStyle}
           >
             {albums &&
-              albums.map((album, key) => <View key={key}>{renderAlbumSquare(album, seedArtist)}</View>)}
+              albums.map((album, key) => (
+                <View key={key}>{renderAlbumSquare(album, seedArtist)}</View>
+              ))}
           </ScrollView>
         </View>
       </Screen>

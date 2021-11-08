@@ -15,8 +15,13 @@ export type Icons =
   | "skip-forward"
   | "artist"
   | "album"
+  | "search"
 
-export const IconButton = (iconName: Icons | IconTypes, action = () => {}, style: ViewStyle = {}) => {
+export const IconButton = (
+  iconName: Icons | IconTypes,
+  action = () => {},
+  style: ViewStyle = {},
+) => {
   const dim = scaleByDeviceWidth(16)
   const getIconByName = () => {
     switch (iconName) {
@@ -49,6 +54,9 @@ export const IconButton = (iconName: Icons | IconTypes, action = () => {}, style
 
       case "artist":
         return <SvgIcons.Artist height={dim} width={dim} />
+
+      case "search":
+        return <SvgIcons.Search height={dim} width={dim} />
 
       default:
         return <SvgIcons.Close height={dim} width={dim} />

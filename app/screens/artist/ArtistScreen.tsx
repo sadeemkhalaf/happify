@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react"
 import { ScrollView, View, ViewStyle } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import FastImage from "react-native-fast-image"
-import { renderShadowBox } from ".."
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
 import { color } from "../../theme"
 import { moderateScale, scaleByDeviceWidth } from "../../theme/dimensionUtils"
 import { API_KEY } from "../../services/api/api-config"
 import { AuthApiService } from "../../services/api"
-import { renderAlbumSquare, renderEmptyAlbumSquare } from "./style"
 import { useNavigation } from "@react-navigation/core"
+import { renderAlbumSquare, renderEmptyAlbumSquare, renderShadowBox } from "./style"
 
 const ScrollContainer: ViewStyle = {
   display: "flex",
@@ -48,6 +47,10 @@ const ArtistScreen = ({ route }) => {
     navigate.canGoBack() ? navigate.goBack() : navigate.navigate("explore")
   }
 
+  const handleNavToSearch = () => {
+    navigate.navigate("search")
+  }
+
   return (
     <LinearGradient
       colors={[color.palette.grey.type1, color.palette.grey.type1]}
@@ -61,7 +64,9 @@ const ArtistScreen = ({ route }) => {
           width: "100%",
           alignItems: "center",
         }}
-        leftIcon={"close"}
+        rightIcon={'search'}
+        onRightPress={handleNavToSearch}
+        leftIcon={"back"}
         onLeftPress={handleClose}
       />
       <View>
@@ -93,7 +98,7 @@ const ArtistScreen = ({ route }) => {
             }}
           />
           <Text
-            text={`${albums.length} Albums`}
+            text={`${albums && albums.length && albums?.length} Albums`}
             numberOfLines={1}
             style={{
               textAlign: "center",
@@ -105,10 +110,10 @@ const ArtistScreen = ({ route }) => {
           />
         </View>
         <ScrollView contentContainerStyle={[ScrollContainer]} showsVerticalScrollIndicator={false}>
-          {albums.map((album, key) => (
+          {albums && albums.map((album, key) => (
             <View key={key}>{renderAlbumSquare(album, artist?.id_artist)}</View>
           ))}
-          {albums.length % 2 !== 0 && renderEmptyAlbumSquare()}
+          {albums && albums.length % 2 !== 0 && renderEmptyAlbumSquare()}
         </ScrollView>
       </Screen>
     </LinearGradient>

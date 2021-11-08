@@ -121,7 +121,7 @@ export class Api {
   }
 
     // get album Tracks
-    public async getAllArtistAlbum(artist_id: number = 19155, album_id: number) {
+    public async getAllArtistAlbumTracks(artist_id: number = 19155, album_id: number) {
       try {
         // artists/:id_artist/albums/:id_album/tracks
 
