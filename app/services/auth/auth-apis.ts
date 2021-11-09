@@ -8,14 +8,6 @@ import { googleWebClientID, googleBasicProfileAccess, googleIosClientID } from "
 **************************************
 */
 
-const signinWithEmailPassword = (email: string, password: string) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password)
-}
-
-const signupWithEmailPassword = (email: string, password: string) => {
-  return firebase.auth().createUserWithEmailAndPassword(email, password)
-}
-
 const getUserInfo = (uid: string) => {
   return firestore().collection("users").doc(uid)
 }
@@ -62,8 +54,6 @@ const signinWithGoogleAccount = async () => {
 
 export {
   configureGoogleSigin,
-  signupWithEmailPassword,
-  signinWithEmailPassword,
   signinWithGoogleAccount,
   checkUserExists,
   getUserInfo,
