@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { LinearGradient } from "expo-linear-gradient"
 import { ImageRequireSource, TextStyle, View, ViewStyle } from "react-native"
 import FastImage from "react-native-fast-image"
@@ -7,6 +7,7 @@ import { moderateScale } from "../../theme/dimensionUtils"
 import { color } from "../../theme"
 import { signinWithGoogleAccount } from "../../services/auth/auth-apis"
 import { auth } from "../../../fb-configs"
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
 
 const albumCover = require("./../../../assets/images/astro.jpg") as ImageRequireSource
 
@@ -35,17 +36,31 @@ const UpgradeButton = () => (
   />
 )
 
-const isUserLoggedIn = () => {
-
-  console.log(auth().currentUser)
-}
-
-isUserLoggedIn();
-
 const ProfilePhoto = () => {
-  const handleLoginWithGoogle = () => signinWithGoogleAccount()
+  const [currentUser, setCurrentUser] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const [signedin, setSignedin] = useState(false)
+  const getCurrentUser = async () => {
+    const current = await GoogleSignin.getCurrentUser()
+    setCurrentUser(current)
+  }
+
+  useEffect(() => {
+    getCurrentUser()
+  }, [currentUser, loading])
+
+  const handleLoginWithGoogle = async () => {
+    setLoading(true)
+    await signinWithGoogleAccount()
+    setLoading(false)
+  }
+
+  const handleSignout = async () => {
+    setLoading(true)
+    await GoogleSignin.signOut()
+    setLoading(false)
+  }
+
   return (
     <>
       <View
@@ -58,12 +73,12 @@ const ProfilePhoto = () => {
         <FastImage source={albumCover} style={coverPhotoImageStyle} resizeMode={"cover"} />
       </View>
       <Text
-        text={"Guest User"}
+        text={currentUser ? currentUser.user.name : "Guest User"}
         style={{ fontWeight: "500", fontSize: moderateScale(18), marginVertical: moderateScale(8) }}
       />
       <Button
-        onPress={handleLoginWithGoogle}
-        text={signedin ? "Sign out" : "Login"}
+        onPress={currentUser ? handleSignout : handleLoginWithGoogle}
+        text={currentUser ? "Sign out" : "Login"}
         style={{
           backgroundColor: "transparent",
           borderColor: color.palette.white,

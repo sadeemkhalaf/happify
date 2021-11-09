@@ -1,4 +1,4 @@
-import { firebase, firestore } from "./../../../fb-configs"
+import { auth, firebase, firestore } from "./../../../fb-configs"
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
 import { googleWebClientID, googleBasicProfileAccess, googleIosClientID } from "./auth-configs"
 
@@ -37,6 +37,7 @@ const signinWithGoogleAccount = async () => {
     const userInfo = await GoogleSignin.signIn()
 
     console.log(userInfo)
+    return userInfo;
 
     // do something on successfully login
   } catch (error) {
