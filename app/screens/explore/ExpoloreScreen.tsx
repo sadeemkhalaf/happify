@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, ImageRequireSource, ScrollView, View, ViewStyle } from "react-native"
-import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from "expo-linear-gradient"
 import FastImage from "react-native-fast-image"
 import { BG_GRADIENT, Header, Screen, Text } from "../../components"
@@ -12,6 +11,7 @@ import { AuthApiService } from "../../services/api"
 import { renderTrackSquare, renderAlbumSquare } from "./style"
 import { API_KEY } from "../../services/api/api-config"
 import arrayShuffle from "array-shuffle"
+import { useNavigation } from "@react-navigation/core"
 
 const albumCover = require("./../../../assets/images/image-cover.png") as ImageRequireSource
 
@@ -41,9 +41,9 @@ const ExpoloreScreen = () => {
   const { navigate } = useNavigation()
   const apiService = new Api()
 
-  useEffect(() => {
-    apiService.getArtists().then((res) => console.log(res))
-  }, [])
+  // useEffect(() => {
+  //   apiService.getArtists().then((res) => console.log(res))
+  // }, [])
 
   //artist: 192169
 

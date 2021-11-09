@@ -1,4 +1,4 @@
-import { firebase, firestore } from "./../../../fb-configs"
+import { auth, firebase, firestore } from "./../../../fb-configs"
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
 import { googleWebClientID, googleBasicProfileAccess, googleIosClientID } from "./auth-configs"
 
@@ -7,14 +7,6 @@ import { googleWebClientID, googleBasicProfileAccess, googleIosClientID } from "
     email/password authentication 
 **************************************
 */
-
-const signinWithEmailPassword = (email: string, password: string) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password)
-}
-
-const signupWithEmailPassword = (email: string, password: string) => {
-  return firebase.auth().createUserWithEmailAndPassword(email, password)
-}
 
 const getUserInfo = (uid: string) => {
   return firestore().collection("users").doc(uid)
@@ -45,6 +37,7 @@ const signinWithGoogleAccount = async () => {
     const userInfo = await GoogleSignin.signIn()
 
     console.log(userInfo)
+    return userInfo;
 
     // do something on successfully login
   } catch (error) {
@@ -62,8 +55,6 @@ const signinWithGoogleAccount = async () => {
 
 export {
   configureGoogleSigin,
-  signupWithEmailPassword,
-  signinWithEmailPassword,
   signinWithGoogleAccount,
   checkUserExists,
   getUserInfo,
