@@ -1,4 +1,4 @@
-import { auth, firebase, firestore } from "./../../../fb-configs"
+import { firebase, firestore } from "./../../../fb-configs"
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin"
 import { googleWebClientID, googleBasicProfileAccess, googleIosClientID } from "./auth-configs"
 

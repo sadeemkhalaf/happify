@@ -6,7 +6,6 @@ import { BG_GRADIENT, Button, Header, Screen, Text } from "../../components"
 import { moderateScale } from "../../theme/dimensionUtils"
 import { color } from "../../theme"
 import { signinWithGoogleAccount } from "../../services/auth/auth-apis"
-import { auth } from "../../../fb-configs"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 
 const albumCover = require("./../../../assets/images/astro.jpg") as ImageRequireSource
@@ -70,7 +69,7 @@ const ProfilePhoto = () => {
           borderRadius: moderateScale(90),
         }}
       >
-        <FastImage source={albumCover} style={coverPhotoImageStyle} resizeMode={"cover"} />
+        <FastImage source={currentUser ? {uri: currentUser.user.photo} : albumCover} style={coverPhotoImageStyle} resizeMode={"cover"} />
       </View>
       <Text
         text={currentUser ? currentUser.user.name : "Guest User"}
